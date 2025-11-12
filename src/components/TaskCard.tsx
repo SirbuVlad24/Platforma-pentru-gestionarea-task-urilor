@@ -1,19 +1,17 @@
 interface TaskCardProps {
+  id: number;
   title: string;
-  completed?: boolean;
+  description?: string;
+  priority?: string;
+  status?: string;
 }
 
-export default function TaskCard({ title, completed = false }: TaskCardProps) {
+export default function TaskCard({ title, description, priority, status }: TaskCardProps) {
   return (
-    <div
-      className={`p-4 mb-4 rounded border transition-colors ${
-        completed ? 'bg-green-100 border-green-400' : 'bg-red-100 border-red-400'
-      }`}
-    >
-      <h3 className="text-lg font-semibold mb-1">{title}</h3>
-      <p className="text-gray-700 text-sm">
-        Status: {completed ? 'Completat ✅' : 'Incomplet ❌'}
-      </p>
+    <div style={{ border: "1px solid gray", padding: "10px", marginBottom: "10px" }}>
+      <h3>{title}</h3>
+      {description && <p>{description}</p>}
+      <p>Priority: {priority || "Medium"} | Status: {status || "To Do"}</p>
     </div>
   );
 }
