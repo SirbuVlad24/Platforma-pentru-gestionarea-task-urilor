@@ -1,10 +1,14 @@
-import Image from "next/image";
+import TaskCard from '../components/TaskCard';
 
 export default function HomePage() {
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Salut, Task Manager!</h1>
-      <p>Acesta este un test simplu pentru a verifica că totul funcționează.</p>
+    <main className="p-8">
+      <h1 className="text-3xl font-bold mb-6">Salut, Task Manager! 🚀</h1>
+      <p className="mb-4">Lista de task-uri:</p>
+
+      <TaskCard title="Primul task" completed={false} />
+      <TaskCard title="Al doilea task" completed={true} />
+      <TaskCard title="Al treilea task" />
     </main>
   );
 }
