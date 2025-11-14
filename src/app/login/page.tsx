@@ -1,23 +1,34 @@
 "use client";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await signIn("credentials", { redirect: false, email, password });
-    setMessage(res?.error ? "Login failed" : "Login successful!");
-  };
+  e.preventDefault();
+
+  const res = await signIn("credentials", { redirect: false, email, password });
+
+  if (res?.error) {
+    setMessage("Login failed");
+  } else {
+    setMessage("Login successful!");
+    // redirect după login
+    router.push("/dashboard"); 
+  }
+};
+
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
-    setMessage("Logged out successfully!");
-  };
+  await signOut({ redirect: false });
+  router.push("/");
+};
 
   return (
     <div style={{ maxWidth: 400, margin: 50 }}>

@@ -29,7 +29,6 @@ export default function RegisterPage() {
 
     setMessage("User created! Logging in...");
 
-    // login automat după signup
     const login = await signIn("credentials", {
       redirect: false,
       email,
@@ -40,7 +39,7 @@ export default function RegisterPage() {
       setMessage("Signup succeeded, but login failed.");
     } else {
       setMessage("Logged in successfully!");
-      router.push("/"); // redirect la homepage sau dashboard
+      router.push("/dashboard");
     }
   };
 

@@ -8,8 +8,7 @@ export default function HomePage() {
       <h1>Dashboard</h1>
       <nav>
         <Link href="/login">Login</Link> |{" "}
-        <Link href="/register">Register</Link> |{" "}
-        <Link href="/task">Tasks</Link>
+        <Link href="/register">Register</Link>{" "}
       </nav>
     </div>
   );
