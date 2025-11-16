@@ -9,6 +9,7 @@ export default function HomePage() {
       <nav>
         <Link href="/login">Login</Link> |{" "}
         <Link href="/register">Register</Link>{" "}
+        <div className="text-red-500">Test Tailwind</div>
       </nav>
     </div>
   );
