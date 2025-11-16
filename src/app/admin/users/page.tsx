@@ -20,7 +20,7 @@ export default function AdminUsersPage() {
     if (status === "loading") return;
 
     if (!session) {
-      router.push("/signin");
+      router.push("/");
       return;
     }
 
