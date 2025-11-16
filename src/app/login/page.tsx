@@ -1,52 +1,80 @@
 "use client";
-import { useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push("/dashboard");
+    }
+  }, [session, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await signIn("credentials", { redirect: false, email, password });
-    setMessage(res?.error ? "Login failed" : "Login successful!");
-  };
 
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
-    setMessage("Logged out successfully!");
+    const res = await signIn("credentials", { redirect: false, email, password });
+
+    if (res?.error) {
+      setMessage("❌ Incorrect credentials");
+    } else {
+      setMessage("✅ Login successful!");
+      router.push("/dashboard");
+    }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: 50 }}>
-      <h1>Authentication</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <div className="w-full max-w-sm bg-white shadow-lg rounded-xl p-6">
+        <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
 
-      {session ? (
-        <div>
-          <p>Logged in as {session.user?.email} ({session.user?.role})</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={e => setEmail(e.target.value)} 
-            placeholder="Email" 
-          />
-          <input 
-            type="password" 
-            value={password} 
-            onChange={e => setPassword(e.target.value)} 
-            placeholder="Password" 
-          />
-          <button type="submit">Login</button>
-        </form>
-      )}
+        {!session ? (
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <input
+              type="email"
+              className="border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+            />
 
-      {message && <p>{message}</p>}
+            <input
+              type="password"
+              className="border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              required
+            />
+
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+            >
+              Login
+            </button>
+          </form>
+        ) : (
+          <p className="text-center text-gray-600">Redirecting...</p>
+        )}
+
+        {message && (
+          <p
+            className={`mt-4 text-center font-semibold ${
+              message.startsWith("❌") ? "text-red-500" : "text-green-600"
+            }`}
+          >
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
