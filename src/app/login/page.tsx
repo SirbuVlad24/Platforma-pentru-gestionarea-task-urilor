@@ -10,7 +10,6 @@ export default function SignInPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  // Redirect dacă e logat
   useEffect(() => {
     if (session) {
       router.push("/dashboard");
