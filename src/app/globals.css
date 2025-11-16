@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff; /* alb */
-  --foreground: #171717; /* text închis */
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 @theme inline {
@@ -12,7 +12,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Eliminăm dark mode
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -26,3 +26,5 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
