@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
@@ -10,16 +10,17 @@ export default function Dashboard() {
   if (!session)
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-lg">Loading...</p>
+        <p className="text-lg">Loading session...</p>
       </div>
     );
 
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.push("/");
+  const handleViewTasks = () => {
+    router.push("/dashboard/tasks_user");
   };
 
-  const goToAdmin = () => router.push("/admin/users");
+  const handleGoToAdmin = () => {
+    router.push("/admin/users");
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen px-4">
@@ -31,20 +32,21 @@ export default function Dashboard() {
         <p className="text-gray-700 mb-6">Role: {session.user.role}</p>
 
         <div className="flex flex-col gap-4">
+          {/* USER TASKS */}
+          {session.user.role === "USER" && (
+            <button
+              onClick={handleViewTasks}
+              className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+              View Tasks
+            </button>
+          )}
 
-          {/* LOGOUT BUTTON */}
-          <button
-            onClick={handleLogout}
-            className="w-full py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-          >
-            Logout
-          </button>
-
-          {/* ADMIN BUTTON */}
+          {/* ADMIN */}
           {session.user.role === "ADMIN" && (
             <button
-              onClick={goToAdmin}
-              className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              onClick={handleGoToAdmin}
+              className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
               Go to Admin Panel
             </button>
