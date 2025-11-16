@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
@@ -10,7 +10,6 @@ export default function SignInPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  // 🔥 Dacă e logat → trimite-l la dashboard
   useEffect(() => {
     if (session) {
       router.push("/dashboard");
@@ -34,7 +33,7 @@ export default function SignInPage() {
     <div style={{ maxWidth: 400, margin: 50 }}>
       <h1>Authentication</h1>
 
-      {/* Login UI NU SE MAI VEDE dacă e logat → îl redirecționezi */}
+      {}
       {!session ? (
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <input 
@@ -52,7 +51,7 @@ export default function SignInPage() {
           <button type="submit">Login</button>
         </form>
       ) : (
-        <p>Redirecting...</p> // doar temporar, până face push
+        <p>Redirecting...</p>
       )}
 
       {message && <p>{message}</p>}
