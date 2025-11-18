@@ -51,6 +51,16 @@ export default function Dashboard() {
               Go to Admin Panel
             </button>
           )}
+
+          {session.user.role === "ADMIN" && (
+            <button
+              onClick={() => router.push("/admin/tasks")}
+              className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+  >
+              Manage Tasks
+            </button>
+        )}
+
         </div>
       </div>
     </div>
