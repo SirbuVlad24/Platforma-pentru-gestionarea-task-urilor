@@ -22,6 +22,12 @@ export default function Dashboard() {
     router.push("/admin/users");
   };
 
+  const handleGoToTaskManagement = () => {
+    router.push("/dashboard/manage_admin");
+  };
+
+
+
   return (
     <div className="flex justify-center items-center min-h-screen px-4">
       <div className="max-w-md w-full p-6 border border-gray-300 rounded-lg shadow-md text-center bg-white">
@@ -54,7 +60,7 @@ export default function Dashboard() {
 
           {session.user.role === "ADMIN" && (
             <button
-              onClick={() => router.push("/admin/tasks")}
+            onClick={handleGoToTaskManagement}
               className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
   >
               Manage Tasks
