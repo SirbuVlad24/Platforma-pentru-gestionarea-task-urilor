@@ -21,7 +21,6 @@ export default function Header() {
   return (
     <header className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
       
-      {/* 🔵 Task Manager → Link to /dashboard */}
       <button
         onClick={() => router.push("/dashboard")}
         className="text-xl font-bold hover:text-blue-600 transition"
@@ -30,7 +29,7 @@ export default function Header() {
       </button>
 
       <div className="relative flex items-center gap-4">
-        {/* Avatar (fără click) */}
+       
         <Avatar
           size={40}
           name={email}
@@ -38,12 +37,10 @@ export default function Header() {
           colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
         />
 
-        {/* Numele userului (fără click) */}
         <span className="text-gray-700 font-medium">
           {name}
         </span>
 
-        {/* Logout permanent */}
         <button
           onClick={handleLogout}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
