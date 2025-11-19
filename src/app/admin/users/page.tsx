@@ -126,7 +126,7 @@ export default function AdminUsersPage() {
 
       setMessage("Task assigned successfully");
 
-      // Refresh tasks
+
       const tasksRes = await fetch("/api/tasks/full");
       if (tasksRes.ok) {
         const tasksData = await tasksRes.json();
@@ -138,7 +138,7 @@ export default function AdminUsersPage() {
     }
   };
 
-  // ➖ Unassign task from user
+
   const unassignTask = async (userId: string, taskId: number) => {
     try {
       const res = await fetch("/api/tasks/unassign", {
@@ -155,7 +155,7 @@ export default function AdminUsersPage() {
 
       setMessage("Task unassigned successfully");
 
-      // Refresh tasks
+    
       const tasksRes = await fetch("/api/tasks/full");
       if (tasksRes.ok) {
         const tasksData = await tasksRes.json();
@@ -167,14 +167,13 @@ export default function AdminUsersPage() {
     }
   };
 
-  // Helper: Get assigned tasks for a user
+  
   const getAssignedTasksForUser = (userId: string): Task[] => {
     return tasks.filter((task) =>
       task.assignedUsers.some((assignment) => assignment.userId === userId)
     );
   };
 
-  // Helper: Get unassigned tasks for a user
   const getUnassignedTasksForUser = (userId: string): Task[] => {
     return tasks.filter(
       (task) => !task.assignedUsers.some((assignment) => assignment.userId === userId)

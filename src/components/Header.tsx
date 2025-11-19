@@ -27,7 +27,14 @@ export default function Header() {
 
   return (
     <header className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
-      <h1 className="text-xl font-bold">Task Manager</h1>
+      
+      {/* 🔵 Task Manager → Link to /dashboard */}
+      <button
+        onClick={() => router.push("/dashboard")}
+        className="text-xl font-bold hover:text-blue-600 transition"
+      >
+        Task Manager
+      </button>
 
       <div className="relative flex items-center gap-4">
         {/* Avatar cartoon */}
