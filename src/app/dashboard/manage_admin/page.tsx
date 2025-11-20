@@ -25,7 +25,6 @@ export default function ManageAdminTasksPage() {
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  // Redirect dacă nu e admin
   useEffect(() => {
     if (!session) return;
     if (session.user.role !== "ADMIN") {

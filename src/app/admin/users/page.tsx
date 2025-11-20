@@ -29,7 +29,6 @@ export default function AdminUsersPage() {
     }
   }, [session, status, router]);
 
-  // 🔄 Fetch users
   useEffect(() => {
     if (!session) return;
 
@@ -48,7 +47,6 @@ export default function AdminUsersPage() {
     fetchUsers();
   }, [session]);
 
-  // 🔄 Fetch tasks
   useEffect(() => {
     if (!session) return;
 
@@ -68,7 +66,6 @@ export default function AdminUsersPage() {
     fetchTasks();
   }, [session]);
 
-  // 🔼 Make Admin
   const makeAdmin = async (userId: string) => {
     try {
       const res = await fetch("/api/set-role", {
@@ -96,7 +93,6 @@ export default function AdminUsersPage() {
     }
   };
 
-  // 🔄 Toggle expanded user
   const toggleUserExpanded = (userId: string) => {
     setExpandedUsers((prev) => {
       const newSet = new Set(prev);
@@ -109,7 +105,6 @@ export default function AdminUsersPage() {
     });
   };
 
-  // ➕ Assign task to user
   const assignTask = async (userId: string, taskId: number) => {
     try {
       const res = await fetch("/api/tasks/assign", {
