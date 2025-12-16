@@ -67,15 +67,6 @@ export default function Dashboard() {
             </button>
         )}
 
-          {session.user.role === "ADMIN" && (
-            <button
-              onClick={() => router.push("/dashboard/test-ai")}
-              className="w-full py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
-            >
-              🧪 Test AI Priority Detection
-            </button>
-          )}
-
         </div>
       </div>
     </div>
