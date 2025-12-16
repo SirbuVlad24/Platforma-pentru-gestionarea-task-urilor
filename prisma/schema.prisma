@@ -18,6 +18,12 @@ enum TaskPriority {
   HIGH
 }
 
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
 model User {
   id        String        @id @default(cuid())
   name      String?
@@ -30,11 +36,13 @@ model User {
 }
 
 model Task {
-  id        Int             @id @default(autoincrement())
-  title     String
-  completed Boolean         @default(false)
-  priority  TaskPriority    @default(MEDIUM)
-  createdAt DateTime        @default(now())
+  id          Int             @id @default(autoincrement())
+  title       String
+  description String?
+  completed   Boolean         @default(false)
+  priority    TaskPriority    @default(MEDIUM)
+  status      TaskStatus      @default(TODO)
+  createdAt   DateTime        @default(now())
 
   assignedUsers UsersOnTasks[]   // relația many-to-many
 }

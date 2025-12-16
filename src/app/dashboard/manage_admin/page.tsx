@@ -7,7 +7,9 @@ import { useRouter } from "next/navigation";
 type Task = {
   id: number;
   title: string;
+  description?: string;
   priority: string;
+  status?: string;
   completed: boolean;
 };
 
@@ -20,6 +22,7 @@ export default function ManageAdminTasksPage() {
 
   const [form, setForm] = useState({
     title: "",
+    description: "",
     priority: "MEDIUM",
   });
 
@@ -52,13 +55,29 @@ export default function ManageAdminTasksPage() {
   const createTask = async () => {
     if (!form.title.trim()) return;
 
-    await fetch("/api/tasks/create", {
+    // Don't send priority if description exists - let AI detect it
+    const payload: any = {
+      title: form.title,
+      description: form.description,
+    };
+    
+    // Only send priority if there's no description
+    if (!form.description.trim()) {
+      payload.priority = form.priority;
+    }
+
+    const res = await fetch("/api/tasks/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
 
-    setForm({ title: "", priority: "MEDIUM" });
+    const data = await res.json();
+    if (data.task) {
+      console.log("Task created with priority:", data.task.priority);
+    }
+
+    setForm({ title: "", description: "", priority: "MEDIUM" });
     fetchTasks();
   };
 
@@ -109,17 +128,42 @@ export default function ManageAdminTasksPage() {
           }
         />
 
-        <select
-          className="w-full border p-2 rounded mb-2"
-          value={form.priority}
+        <textarea
+          placeholder="Description (priority will be auto-detected based on importance)..."
+          className="w-full border p-2 rounded mb-2 min-h-[100px]"
+          value={form.description}
           onChange={(e) =>
-            setForm({ ...form, priority: e.target.value })
+            setForm({ ...form, description: e.target.value })
           }
-        >
-          <option value="LOW">LOW</option>
-          <option value="MEDIUM">MEDIUM</option>
-          <option value="HIGH">HIGH</option>
-        </select>
+        />
+
+        <div className="mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Priority (will be auto-detected from description)
+          </label>
+          <select
+            className="w-full border p-2 rounded"
+            value={form.priority}
+            onChange={(e) =>
+              setForm({ ...form, priority: e.target.value })
+            }
+            disabled={form.description.trim().length > 0}
+          >
+            <option value="LOW">LOW</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HIGH">HIGH</option>
+          </select>
+          {form.description.trim().length > 0 && (
+            <p className="text-xs text-blue-600 mt-1">
+              ⚡ Priority will be auto-detected from description using AI
+            </p>
+          )}
+          {form.description.trim().length === 0 && (
+            <p className="text-xs text-gray-500 mt-1">
+              Add a description to enable AI priority detection
+            </p>
+          )}
+        </div>
 
         <button
           onClick={createTask}
@@ -139,16 +183,19 @@ export default function ManageAdminTasksPage() {
               key={task.id}
               className="bg-white p-4 rounded shadow flex justify-between"
             >
-              <div>
+              <div className="flex-1">
                 <p className="font-semibold">{task.title}</p>
+                {task.description && (
+                  <p className="text-sm text-gray-600 mt-1 mb-1">{task.description}</p>
+                )}
                 <p className="text-sm text-gray-600">
-                  Priority: {task.priority}
+                  Priority: {task.priority} | Status: {task.status || "TODO"}
                 </p>
               </div>
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => setEditingTask(task)}
+                  onClick={() => setEditingTask({ ...task, status: task.status || "TODO" })}
                   className="px-3 py-1 bg-yellow-500 text-white rounded"
                 >
                   Edit
@@ -173,6 +220,7 @@ export default function ManageAdminTasksPage() {
 
             <input
               type="text"
+              placeholder="Title"
               className="w-full border p-2 rounded mb-2"
               value={editingTask.title}
               onChange={(e) =>
@@ -180,8 +228,17 @@ export default function ManageAdminTasksPage() {
               }
             />
 
+            <textarea
+              placeholder="Description (priority will be auto-updated if changed)..."
+              className="w-full border p-2 rounded mb-2 min-h-[100px]"
+              value={editingTask.description || ""}
+              onChange={(e) =>
+                setEditingTask({ ...editingTask, description: e.target.value })
+              }
+            />
+
             <select
-              className="w-full border p-2 rounded mb-4"
+              className="w-full border p-2 rounded mb-2"
               value={editingTask.priority}
               onChange={(e) =>
                 setEditingTask({ ...editingTask, priority: e.target.value })
@@ -190,6 +247,21 @@ export default function ManageAdminTasksPage() {
               <option value="LOW">LOW</option>
               <option value="MEDIUM">MEDIUM</option>
               <option value="HIGH">HIGH</option>
+            </select>
+            <p className="text-xs text-gray-500 mb-2">
+              Priority will be auto-updated from description if description changes
+            </p>
+
+            <select
+              className="w-full border p-2 rounded mb-4"
+              value={editingTask.status || "TODO"}
+              onChange={(e) =>
+                setEditingTask({ ...editingTask, status: e.target.value })
+              }
+            >
+              <option value="TODO">To Do</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="DONE">Done</option>
             </select>
 
             <div className="flex justify-end gap-3">

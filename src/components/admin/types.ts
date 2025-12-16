@@ -7,8 +7,10 @@ export type User = {
 export type Task = {
   id: number;
   title: string;
+  description?: string;
   completed: boolean;
   priority: "LOW" | "MEDIUM" | "HIGH";
+  status?: "TODO" | "IN_PROGRESS" | "DONE";
   createdAt: string;
   assignedUsers: {
     id: number;
