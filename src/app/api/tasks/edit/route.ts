@@ -16,7 +16,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { id, title, description, priority, status, completed } = await req.json();
+    const { id, title, description, priority, status, completed, projectId } = await req.json();
 
     if (!id) {
       return NextResponse.json(
@@ -30,6 +30,7 @@ export async function PUT(req: Request) {
     if (description !== undefined) updateData.description = description;
     if (status !== undefined) updateData.status = status;
     if (completed !== undefined) updateData.completed = completed;
+    if (projectId !== undefined) updateData.projectId = projectId;
 
     // If description is updated and priority is not explicitly set, auto-detect priority
     if (description !== undefined && priority === undefined) {

@@ -11,6 +11,8 @@ type Task = {
   priority: string;
   status?: string;
   completed: boolean;
+  projectId?: number;
+  project?: { id: number; name: string };
 };
 
 export default function ManageAdminTasksPage() {
@@ -18,35 +20,67 @@ export default function ManageAdminTasksPage() {
   const router = useRouter();
 
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [projects, setProjects] = useState<Array<{ id: number; name: string }>>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const [form, setForm] = useState({
     title: "",
     description: "",
     priority: "MEDIUM",
+    projectId: "",
   });
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
     if (!session) return;
-    if (session.user.role !== "ADMIN") {
-      router.push("/dashboard");
-    }
+    // Allow global admins and project admins (will be checked by API)
+    // We don't block project admins here, API will filter tasks
   }, [session, router]);
 
   // Fetch tasks
   const fetchTasks = async () => {
     setLoading(true);
-    const res = await fetch("/api/tasks/full");
-    const data = await res.json();
-    setTasks(data || []);
-    setLoading(false);
+    try {
+      const res = await fetch("/api/tasks/full");
+      if (!res.ok) {
+        console.error("Failed to fetch tasks");
+        setTasks([]);
+        return;
+      }
+      const data = await res.json();
+      console.log("Fetched tasks:", data);
+      setTasks(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+      setTasks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch projects
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch("/api/projects/list");
+      if (!res.ok) {
+        console.error("Failed to fetch projects");
+        setProjects([]);
+        return;
+      }
+      const data = await res.json();
+      console.log("Fetched projects:", data);
+      setProjects(Array.isArray(data.projects) ? data.projects : []);
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+      setProjects([]);
+    }
   };
 
   useEffect(() => {
     const load = async () => {
       await fetchTasks();
+      await fetchProjects();
     };
     load();
   }, []);
@@ -66,19 +100,39 @@ export default function ManageAdminTasksPage() {
       payload.priority = form.priority;
     }
 
-    const res = await fetch("/api/tasks/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-    if (data.task) {
-      console.log("Task created with priority:", data.task.priority);
+    // Add projectId if selected
+    if (form.projectId && form.projectId !== "") {
+      const projectIdNum = parseInt(form.projectId);
+      if (!isNaN(projectIdNum)) {
+        payload.projectId = projectIdNum;
+      }
     }
 
-    setForm({ title: "", description: "", priority: "MEDIUM" });
-    fetchTasks();
+    try {
+      const res = await fetch("/api/tasks/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.error("Error creating task:", error);
+        alert(error.error || "Failed to create task");
+        return;
+      }
+
+      const data = await res.json();
+      if (data.task) {
+        console.log("Task created with priority:", data.task.priority);
+      }
+
+      setForm({ title: "", description: "", priority: "MEDIUM", projectId: "" });
+      await fetchTasks();
+    } catch (err) {
+      console.error("Error creating task:", err);
+      alert("Failed to create task");
+    }
   };
 
   // Delete
@@ -137,6 +191,21 @@ export default function ManageAdminTasksPage() {
           }
         />
 
+        <select
+          className="w-full border p-2 rounded mb-2"
+          value={form.projectId}
+          onChange={(e) =>
+            setForm({ ...form, projectId: e.target.value })
+          }
+        >
+          <option value="">No Project</option>
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+
         <div className="mb-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Priority (will be auto-detected from description)
@@ -176,6 +245,8 @@ export default function ManageAdminTasksPage() {
       {/* Tasks list */}
       {loading ? (
         <p className="text-center">Loading tasks...</p>
+      ) : tasks.length === 0 ? (
+        <p className="text-center text-gray-500">No tasks found. Create your first task!</p>
       ) : (
         <ul className="space-y-4">
           {tasks.map((task) => (
@@ -190,6 +261,9 @@ export default function ManageAdminTasksPage() {
                 )}
                 <p className="text-sm text-gray-600">
                   Priority: {task.priority} | Status: {task.status || "TODO"}
+                  {task.project && (
+                    <span className="ml-2 text-blue-600">| Project: {task.project.name}</span>
+                  )}
                 </p>
               </div>
 
@@ -236,6 +310,25 @@ export default function ManageAdminTasksPage() {
                 setEditingTask({ ...editingTask, description: e.target.value })
               }
             />
+
+            <select
+              className="w-full border p-2 rounded mb-2"
+              value={editingTask.projectId || ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                setEditingTask({
+                  ...editingTask,
+                  projectId: value && value !== "" ? parseInt(value) : undefined,
+                });
+              }}
+            >
+              <option value="">No Project</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
 
             <select
               className="w-full border p-2 rounded mb-2"

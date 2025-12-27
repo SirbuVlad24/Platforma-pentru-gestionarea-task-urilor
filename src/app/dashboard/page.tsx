@@ -67,6 +67,13 @@ export default function Dashboard() {
             </button>
         )}
 
+          <button
+            onClick={() => router.push("/dashboard/projects")}
+            className="w-full py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
+          >
+            Projects
+          </button>
+
         </div>
       </div>
     </div>
