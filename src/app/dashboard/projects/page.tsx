@@ -93,7 +93,7 @@ export default function ProjectsPage() {
 
   const createProject = async () => {
     if (!newProject.name.trim()) {
-      setMessage("Project name is required");
+      setMessage("Every ship needs a name, Captain! What shall we call it?");
       return;
     }
 
@@ -106,16 +106,16 @@ export default function ProjectsPage() {
 
       if (!res.ok) {
         const error = await res.json();
-        setMessage(error.error || "Failed to create project");
+        setMessage(error.error || "Failed to commission the ship, Captain!");
         return;
       }
 
-      setMessage("Project created successfully");
+      setMessage("Ship commissioned successfully! Welcome to the fleet!");
       setNewProject({ name: "", description: "" });
       setShowCreateForm(false);
       fetchProjects();
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -129,14 +129,14 @@ export default function ProjectsPage() {
 
       if (!res.ok) {
         const error = await res.json();
-        setMessage(error.error || "Failed to add member");
+        setMessage(error.error || "Failed to recruit crew member, Captain!");
         return;
       }
 
-      setMessage("Member added successfully");
+      setMessage("Crew member recruited successfully! Welcome aboard!");
       fetchProjects();
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -150,14 +150,14 @@ export default function ProjectsPage() {
 
       if (!res.ok) {
         const error = await res.json();
-        setMessage(error.error || "Failed to add admin");
+        setMessage(error.error || "Failed to promote to Captain, Captain!");
         return;
       }
 
-      setMessage("Admin added successfully");
+      setMessage("Crew member promoted to Captain successfully! They now command this ship!");
       fetchProjects();
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -171,14 +171,14 @@ export default function ProjectsPage() {
 
       if (!res.ok) {
         const error = await res.json();
-        setMessage(error.error || "Failed to remove member");
+        setMessage(error.error || "Failed to maroon crew member, Captain!");
         return;
       }
 
-      setMessage("Member removed successfully");
+      setMessage("Crew member marooned successfully! They've been left behind!");
       fetchProjects();
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -192,14 +192,14 @@ export default function ProjectsPage() {
 
       if (!res.ok) {
         const error = await res.json();
-        setMessage(error.error || "Failed to unassign task");
+        setMessage(error.error || "Failed to unassign mission, Captain!");
         return;
       }
 
-      setMessage("Task unassigned successfully");
+      setMessage("Mission unassigned successfully! The crew member has been relieved of duty!");
       fetchProjects();
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -243,56 +243,79 @@ export default function ProjectsPage() {
   };
 
   if (!session) {
-    return <p className="text-center mt-10">Loading session...</p>;
+    return <div className="bg-red-50 min-h-screen flex items-center justify-center"><p className="text-center text-red-900 flex items-center gap-2"><span className="animate-spin">⚓</span>Loading yer fleet, matey...</p></div>;
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-6">
+    <div className="max-w-4xl mx-auto py-10 px-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Projects</h1>
+        <h1 className="text-3xl font-bold text-red-900 flex items-center gap-3" style={{ fontFamily: "'Pirata One', cursive", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>
+          <span className="text-4xl">🚢</span>
+          The Fleet
+        </h1>
         {session.user.role === "ADMIN" && (
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 bg-red-800 text-yellow-400 rounded hover:bg-red-900 transition font-bold shadow-lg hover:shadow-xl flex items-center gap-2 border-2 border-black"
+            style={{ fontFamily: "'Pirata One', cursive" }}
           >
-            {showCreateForm ? "Cancel" : "+ Create Project"}
+            {showCreateForm ? "❌ Abandon" : "🚢 Commission Ship"}
           </button>
         )}
       </div>
 
       {message && (
         <div
-          className={`mb-4 p-3 rounded ${
-            message.includes("error") || message.includes("Failed")
-              ? "bg-red-100 text-red-700"
-              : "bg-green-100 text-green-700"
+          className={`mb-4 p-4 rounded-xl font-bold border-4 border-black shadow-xl relative bg-white ${
+            message.includes("error") || message.includes("Failed") || message.includes("not eligible")
+              ? "text-red-900"
+              : "text-green-900"
           }`}
+          style={{ fontFamily: "'Pirata One', cursive" }}
         >
-          {message}
-          <button
-            onClick={() => setMessage("")}
-            className="ml-2 text-sm underline"
-          >
-            Dismiss
-          </button>
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <img 
+                src="/skully.png" 
+                alt="Skully the Parrot" 
+                className="w-16 h-16 object-contain"
+              />
+            </div>
+            <div className="flex-1">
+              <div className="text-lg mb-1">Skully squawks:</div>
+              <div className="text-xl">"{message}"</div>
+            </div>
+            <button
+              onClick={() => setMessage("")}
+              className="text-2xl hover:scale-125 transition-transform"
+              title="Dismiss"
+            >
+              ❌
+            </button>
+          </div>
+          {/* Speech bubble tail */}
+          <div className="absolute -bottom-3 left-8 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-black"></div>
         </div>
       )}
 
       {showCreateForm && session.user.role === "ADMIN" && (
-        <div className="bg-white shadow p-4 rounded mb-6">
-          <h2 className="text-xl font-semibold mb-3">Create New Project</h2>
+        <div className="bg-red-100 shadow-xl p-4 rounded-lg mb-6 border-4 border-black">
+          <h2 className="text-xl font-semibold mb-3 text-red-900 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+            <span>🚢</span>
+            Commission New Ship
+          </h2>
           <input
             type="text"
-            placeholder="Project name..."
-            className="w-full border p-2 rounded mb-2"
+            placeholder="Ship name (e.g., 'The Black Pearl')..."
+            className="w-full border-2 border-black bg-white p-2 rounded mb-2 text-red-900 placeholder-red-500 font-semibold"
             value={newProject.name}
             onChange={(e) =>
               setNewProject({ ...newProject, name: e.target.value })
             }
           />
           <textarea
-            placeholder="Description (optional)..."
-            className="w-full border p-2 rounded mb-2 min-h-[80px]"
+            placeholder="Ship description (optional)..."
+            className="w-full border-2 border-black bg-white p-2 rounded mb-2 min-h-[80px] text-red-900 placeholder-red-500"
             value={newProject.description}
             onChange={(e) =>
               setNewProject({ ...newProject, description: e.target.value })
@@ -300,18 +323,24 @@ export default function ProjectsPage() {
           />
           <button
             onClick={createProject}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-red-800 text-yellow-400 px-4 py-2 rounded hover:bg-red-900 transition font-bold shadow-lg flex items-center gap-2 justify-center border-2 border-black"
+            style={{ fontFamily: "'Pirata One', cursive" }}
           >
-            Create
+            <span>🚢</span>
+            Commission Ship!
           </button>
         </div>
       )}
 
       {loading ? (
-        <p className="text-center">Loading projects...</p>
+        <p className="text-center text-red-900 flex items-center justify-center gap-2 font-bold">
+          <span className="animate-spin">⚓</span>
+          Scouring the seas for ships...
+        </p>
       ) : projects.length === 0 ? (
-        <p className="text-center text-gray-500">
-          No projects found. {session.user.role === "ADMIN" && "Create your first project!"}
+        <p className="text-center text-red-900 bg-red-200 p-4 rounded border-2 border-black flex items-center justify-center gap-2 font-bold">
+          <span>🚢</span>
+          No ships in the fleet yet. {session.user.role === "ADMIN" && "Time to commission yer first ship, Captain!"}
         </p>
       ) : (
         <div className="space-y-4">
@@ -324,57 +353,77 @@ export default function ProjectsPage() {
                 user.id !== session.user.id
             );
 
+            // Check if all tasks in the project are completed
+            const allTasksCompleted = project.tasks.length > 0 && 
+              project.tasks.every((task) => task.status === "DONE");
+
             return (
               <div
                 key={project.id}
-                className="bg-white border rounded-lg shadow-sm overflow-hidden"
+                className={`${allTasksCompleted ? "bg-gray-300 opacity-75 border-gray-600" : "bg-red-100 border-black"} border-4 rounded-lg shadow-xl overflow-hidden`}
               >
                 <div
-                  className="p-4 cursor-pointer hover:bg-gray-50"
+                  className="p-4 cursor-pointer hover:bg-red-200 transition"
                   onClick={() => toggleExpand(project.id)}
                 >
                   <div className="flex justify-between items-center">
                     <div>
-                      <h3 className="text-lg font-semibold">{project.name}</h3>
+                      <h3 className={`text-lg font-bold flex items-center gap-2 ${allTasksCompleted ? "text-gray-800" : "text-red-900"}`} style={{ fontFamily: "'Pirata One', cursive" }}>
+                        <span>🚢</span>
+                        {project.name}
+                        {allTasksCompleted && (
+                          <span className="text-sm bg-gray-500 text-yellow-200 px-3 py-1 rounded-full border-2 border-black font-bold">
+                            ⚓ Voyage Completed - All Treasure Plundered! ⚓
+                          </span>
+                        )}
+                      </h3>
                       {project.description && (
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className={`text-sm mt-1 font-semibold ${allTasksCompleted ? "text-gray-700" : "text-red-800"}`}>
                           {project.description}
                         </p>
                       )}
-                      <div className="flex gap-4 mt-2 text-xs text-gray-500">
-                        <span>{project._count.tasks} tasks</span>
-                        <span>{project._count.members} members</span>
-                        <span>{project._count.admins} admins</span>
+                      {allTasksCompleted && (
+                        <p className="text-sm mt-2 font-bold text-gray-800 italic" style={{ fontFamily: "'Pirata One', cursive" }}>
+                          "This ship has completed all its missions! The crew has returned victorious with all the treasure!"
+                        </p>
+                      )}
+                      <div className={`flex gap-4 mt-2 text-xs font-bold ${allTasksCompleted ? "text-gray-700" : "text-red-900"}`}>
+                        <span>📜 {project._count.tasks} missions</span>
+                        <span>⚓ {project._count.members} crew</span>
+                        <span>🏴‍☠️ {project._count.admins} captains</span>
                       </div>
                     </div>
-                    <span className="text-2xl">
+                    <span className={`text-2xl ${allTasksCompleted ? "text-gray-700" : "text-red-900"}`}>
                       {isExpanded ? "▼" : "▶"}
                     </span>
                   </div>
                 </div>
 
                 {isExpanded && (
-                  <div className="border-t p-4 bg-gray-50">
+                  <div className={`border-t-4 ${allTasksCompleted ? "border-gray-600 bg-gray-100" : "border-black bg-red-50"} p-4`}>
                     <div className="mb-4">
-                      <h4 className="font-semibold mb-2">Admins:</h4>
+                      <h4 className="font-bold mb-2 text-red-900 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+                        <span>🏴‍☠️</span>
+                        Captains:
+                      </h4>
                       {project.admins.length === 0 ? (
-                        <p className="text-sm text-gray-500">No admins</p>
+                        <p className="text-sm text-red-800 font-semibold">No captains aboard</p>
                       ) : (
                         <div className="space-y-1">
                           {project.admins.map((admin) => (
                             <div
                               key={admin.id}
-                              className="flex justify-between items-center text-sm bg-blue-50 p-2 rounded"
+                              className="flex justify-between items-center text-sm bg-yellow-100 p-2 rounded border-2 border-black"
                             >
-                              <span>{admin.user.email}</span>
+                              <span className="text-red-900 font-bold">{admin.user.email}</span>
                               {canManage && (
                                 <button
                                   onClick={() =>
                                     removeMember(project.id, admin.user.id)
                                   }
-                                  className="text-red-600 hover:underline text-xs"
+                                  className="text-red-800 hover:text-red-900 text-xs font-bold border border-black px-2 py-1 rounded bg-red-200"
                                 >
-                                  Remove
+                                  ⚓ Maroon
                                 </button>
                               )}
                             </div>
@@ -384,9 +433,12 @@ export default function ProjectsPage() {
                     </div>
 
                     <div className="mb-4">
-                      <h4 className="font-semibold mb-2">Members:</h4>
+                      <h4 className="font-bold mb-2 text-red-900 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+                        <span>⚓</span>
+                        Crew Members:
+                      </h4>
                       {project.members.length === 0 ? (
-                        <p className="text-sm text-gray-500">No members</p>
+                        <p className="text-sm text-red-800 font-semibold">No crew aboard</p>
                       ) : (
                         <div className="space-y-3">
                           {project.members.map((member) => {
@@ -397,19 +449,19 @@ export default function ProjectsPage() {
                             return (
                               <div
                                 key={member.id}
-                                className="bg-white p-3 rounded border"
+                                className="bg-white p-3 rounded border-2 border-black"
                               >
                                 <div className="flex justify-between items-center mb-2">
-                                  <span className="text-sm font-medium">
+                                  <span className="text-sm font-bold text-red-900">
                                     {member.user.email}
                                     {isAdmin && (
-                                      <span className="ml-2 text-xs text-blue-600">
-                                        (Admin)
+                                      <span className="ml-2 text-xs text-yellow-700 font-bold bg-yellow-200 px-2 py-1 rounded border border-black">
+                                        🏴‍☠️ (Captain)
                                       </span>
                                     )}
                                     {memberTasks.length > 0 && (
-                                      <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                                        {memberTasks.length} task{memberTasks.length !== 1 ? "s" : ""}
+                                      <span className="ml-2 text-xs bg-yellow-400 text-red-900 px-2 py-1 rounded-full font-bold border border-black">
+                                        📜 {memberTasks.length} mission{memberTasks.length !== 1 ? "s" : ""}
                                       </span>
                                     )}
                                   </span>
@@ -418,59 +470,90 @@ export default function ProjectsPage() {
                                       onClick={() =>
                                         removeMember(project.id, member.user.id)
                                       }
-                                      className="text-red-600 hover:underline text-xs"
+                                      className="text-red-800 hover:text-red-900 text-xs font-bold border border-black px-2 py-1 rounded bg-red-200"
                                     >
-                                      Remove Member
+                                      ⚓ Maroon
                                     </button>
                                   )}
                                 </div>
                                 {memberTasks.length > 0 && (
-                                  <div className="ml-2 mt-2 space-y-1 border-l-2 border-gray-200 pl-3">
-                                    <p className="text-xs font-semibold text-gray-600 mb-1">
-                                      Assigned Tasks:
+                                  <div className="ml-2 mt-2 space-y-1 border-l-2 border-black pl-3">
+                                    <p className="text-xs font-bold text-red-900 mb-1">
+                                      📜 Assigned Missions:
                                     </p>
-                                    {memberTasks.map((task) => (
-                                      <div
-                                        key={task.id}
-                                        className="flex justify-between items-center text-xs bg-gray-50 p-2 rounded"
-                                      >
-                                        <div className="flex-1">
-                                          <span className="font-medium">{task.title}</span>
-                                          {task.description && (
-                                            <span className="text-gray-500 ml-2">
-                                              - {task.description.substring(0, 50)}
-                                              {task.description.length > 50 ? "..." : ""}
-                                            </span>
-                                          )}
-                                          <div className="flex gap-2 mt-1">
-                                            <span className={`px-1.5 py-0.5 rounded text-xs ${
-                                              task.priority === "HIGH" ? "bg-red-100 text-red-700" :
-                                              task.priority === "MEDIUM" ? "bg-yellow-100 text-yellow-700" :
-                                              "bg-green-100 text-green-700"
-                                            }`}>
-                                              {task.priority}
-                                            </span>
-                                            <span className={`px-1.5 py-0.5 rounded text-xs ${
-                                              task.completed ? "bg-green-100 text-green-700" :
-                                              task.status === "IN_PROGRESS" ? "bg-blue-100 text-blue-700" :
-                                              "bg-gray-100 text-gray-700"
-                                            }`}>
-                                              {task.status}
-                                            </span>
+                                    {memberTasks.map((task) => {
+                                      const isTaskDone = task.status === "DONE";
+                                      return (
+                                        <div
+                                          key={task.id}
+                                          className={`flex justify-between items-center text-xs p-2 rounded border-2 border-black ${isTaskDone ? "bg-gray-200 opacity-75" : "bg-red-100"}`}
+                                        >
+                                          <div className="flex-1">
+                                            <span className={`font-bold ${isTaskDone ? "text-gray-700" : "text-red-900"}`}>{task.title}</span>
+                                            {task.description && (
+                                              <span className={`ml-2 font-semibold ${isTaskDone ? "text-gray-600" : "text-red-800"}`}>
+                                                - {task.description.substring(0, 50)}
+                                                {task.description.length > 50 ? "..." : ""}
+                                              </span>
+                                            )}
+                                            <div className="flex gap-2 mt-1 flex-wrap">
+                                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold border border-black ${
+                                                task.priority === "HIGH" ? "bg-red-200 text-red-900" :
+                                                task.priority === "MEDIUM" ? "bg-yellow-200 text-yellow-900" :
+                                                "bg-green-200 text-green-900"
+                                              }`}>
+                                                ⚓ {task.priority}
+                                              </span>
+                                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold border border-black ${
+                                                isTaskDone ? "bg-green-200 text-green-900" :
+                                                task.status === "IN_PROGRESS" ? "bg-blue-200 text-blue-900" :
+                                                "bg-gray-200 text-gray-900"
+                                              }`}>
+                                                {isTaskDone ? "✅ Completed Voyage" :
+                                                 task.status === "IN_PROGRESS" ? "⚓ Underway" :
+                                                 "📜 To Do (Awaiting Orders)"}
+                                              </span>
+                                              {!isTaskDone && (
+                                                <button
+                                                  onClick={async () => {
+                                                    try {
+                                                      const res = await fetch("/api/tasks/complete", {
+                                                        method: "PUT",
+                                                        headers: { "Content-Type": "application/json" },
+                                                        body: JSON.stringify({ taskId: task.id }),
+                                                      });
+                                                      if (res.ok) {
+                                                        setMessage("Mission completed successfully! Well done, sailor!");
+                                                        fetchProjects();
+                                                      } else {
+                                                        const error = await res.json();
+                                                        setMessage(error.error || "Failed to complete mission, sailor!");
+                                                      }
+                                                    } catch (err) {
+                                                      setMessage("Something went wrong on the ship, sailor!");
+                                                    }
+                                                  }}
+                                                  className="text-xs font-bold bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 border border-black"
+                                                  style={{ fontFamily: "'Pirata One', cursive" }}
+                                                >
+                                                  ✅ Complete
+                                                </button>
+                                              )}
+                                            </div>
                                           </div>
+                                          {canManage && (
+                                            <button
+                                              onClick={() =>
+                                                unassignTask(member.user.id, task.id)
+                                              }
+                                              className="ml-2 px-2 py-1 bg-red-800 text-yellow-400 rounded hover:bg-red-900 text-xs font-bold shadow border border-black"
+                                            >
+                                              ❌
+                                            </button>
+                                          )}
                                         </div>
-                                        {canManage && (
-                                          <button
-                                            onClick={() =>
-                                              unassignTask(member.user.id, task.id)
-                                            }
-                                            className="ml-2 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
-                                          >
-                                            Remove
-                                          </button>
-                                        )}
-                                      </div>
-                                    ))}
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </div>
@@ -483,11 +566,12 @@ export default function ProjectsPage() {
                     {canManage && (
                       <div className="space-y-2">
                         <div>
-                          <label className="block text-sm font-medium mb-1">
-                            Add Member:
+                          <label className="block text-sm font-bold mb-1 text-red-900 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+                            <span>⚓</span>
+                            Recruit Crew Member:
                           </label>
                           <select
-                            className="w-full border p-2 rounded text-sm"
+                            className="w-full border-2 border-black bg-white p-2 rounded text-sm text-red-900 font-semibold"
                             onChange={(e) => {
                               if (e.target.value) {
                                 addMember(project.id, e.target.value);
@@ -505,11 +589,12 @@ export default function ProjectsPage() {
                         </div>
                         {session.user.role === "ADMIN" && (
                           <div>
-                            <label className="block text-sm font-medium mb-1">
-                              Make Admin (from members) - Global Admin Only:
+                            <label className="block text-sm font-bold mb-1 text-red-900 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+                              <span>🏴‍☠️</span>
+                              Promote to Captain (from crew) - Grand Captain Only:
                             </label>
                             <select
-                              className="w-full border p-2 rounded text-sm"
+                              className="w-full border-2 border-black bg-white p-2 rounded text-sm text-red-900 font-semibold"
                               onChange={(e) => {
                                 if (e.target.value) {
                                   addAdmin(project.id, e.target.value);

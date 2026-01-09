@@ -8,21 +8,21 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return NextResponse.json({ error: "Ye must be logged in to board this ship, sailor!" }, { status: 401 });
     }
 
     const { userId, projectId } = await req.json();
 
     if (!userId || !projectId) {
       return NextResponse.json(
-        { error: "User ID and Project ID are required" },
+        { error: "Ahoy! We need both the crew member and ship details, Captain!" },
         { status: 400 }
       );
     }
 
     // Only global admins can add project admins
     if (!session.user?.role || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden - Only global admins can add project admins" }, { status: 403 });
+      return NextResponse.json({ error: "Only the Grand Captain can promote crew to Captain, ye scallywag!" }, { status: 403 });
     }
 
     const project = await prisma.project.findUnique({
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     });
 
     if (!project) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+      return NextResponse.json({ error: "This ship doesn't exist in the fleet, Captain!" }, { status: 404 });
     }
 
     // Check if user is already an admin
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     });
 
     if (existingAdmin) {
-      return NextResponse.json({ error: "User is already an admin" }, { status: 400 });
+      return NextResponse.json({ error: "This crew member is already a Captain of this ship!" }, { status: 400 });
     }
 
     // Make sure user is a member first
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Server error" },
+      { error: "Something went wrong on the ship, Captain! Check the logs!" },
       { status: 500 }
     );
   }

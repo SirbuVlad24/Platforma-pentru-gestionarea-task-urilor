@@ -82,14 +82,14 @@ export default function AdminUsersPage() {
 
       const data = await res.json();
 
-      setMessage(`User ${data.user.email} is now ADMIN`);
+      setMessage(`${data.user.email} has been promoted to Captain!`);
 
       setUsers((prev) =>
         prev.map((u) => (u.id === data.user.id ? { ...u, role: "ADMIN" } : u))
       );
     } catch (err) {
       console.error(err);
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -119,7 +119,7 @@ export default function AdminUsersPage() {
         return;
       }
 
-      setMessage("Task assigned successfully");
+      setMessage("Mission assigned successfully! The crew member has been given their orders!");
 
 
       const tasksRes = await fetch("/api/tasks/full");
@@ -129,7 +129,7 @@ export default function AdminUsersPage() {
       }
     } catch (err) {
       console.error(err);
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
         return;
       }
 
-      setMessage("Task unassigned successfully");
+      setMessage("Mission unassigned successfully! The crew member has been relieved of duty!");
 
     
       const tasksRes = await fetch("/api/tasks/full");
@@ -158,7 +158,7 @@ export default function AdminUsersPage() {
       }
     } catch (err) {
       console.error(err);
-      setMessage("Something went wrong");
+      setMessage("Something went wrong on the ship, Captain! Check the logs!");
     }
   };
 
@@ -178,8 +178,12 @@ export default function AdminUsersPage() {
   if (!session || session.user.role !== "ADMIN") return null;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 mt-10 bg-white rounded-xl shadow">
-      <h1 className="text-2xl font-bold mb-4">Admin Panel – Users</h1>
+    <div className="max-w-4xl mx-auto p-6 mt-10 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-red-900 flex items-center gap-3" style={{ fontFamily: "'Pirata One', cursive", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>
+        <span className="text-3xl">🏴‍☠️</span>
+        Captain's Quarters
+        <span className="text-3xl">⚓</span>
+      </h1>
 
       <MessageBanner 
         message={message} 

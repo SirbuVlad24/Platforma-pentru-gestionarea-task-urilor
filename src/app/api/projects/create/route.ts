@@ -8,19 +8,19 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return NextResponse.json({ error: "Ye must be logged in to board this ship, sailor!" }, { status: 401 });
     }
 
     // Only global admins can create projects
     if (!session.user?.role || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: "Only the Grand Captain can commission new ships, ye scallywag!" }, { status: 403 });
     }
 
     const { name, description } = await req.json();
 
     if (!name) {
       return NextResponse.json(
-        { error: "Project name is required" },
+        { error: "Every ship needs a name, Captain! What shall we call it?" },
         { status: 400 }
       );
     }
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { error: "Server error" },
+      { error: "Something went wrong on the ship, Captain! Check the logs!" },
       { status: 500 }
     );
   }
