@@ -4,6 +4,20 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+type Task = {
+  id: number;
+  title: string;
+  description?: string;
+  completed: boolean;
+  priority: string;
+  status: string;
+  assignedUsers: Array<{
+    id: number;
+    userId: string;
+    user: { id: string; email: string };
+  }>;
+};
+
 type Project = {
   id: number;
   name: string;
@@ -17,6 +31,7 @@ type Project = {
     id: number;
     user: { id: string; email: string; name?: string };
   }>;
+  tasks: Task[];
   _count: {
     tasks: number;
     members: number;
@@ -165,6 +180,49 @@ export default function ProjectsPage() {
     } catch (err) {
       setMessage("Something went wrong");
     }
+  };
+
+  const unassignTask = async (userId: string, taskId: number) => {
+    try {
+      const res = await fetch("/api/tasks/unassign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, taskId }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        setMessage(error.error || "Failed to unassign task");
+        return;
+      }
+
+      setMessage("Task unassigned successfully");
+      fetchProjects();
+    } catch (err) {
+      setMessage("Something went wrong");
+    }
+  };
+
+  const getTasksForMember = (project: Project, memberId: string): Task[] => {
+    // Get only tasks that belong to this project and are assigned to the member
+    const memberTasks = project.tasks.filter((task) =>
+      task.assignedUsers.some((assignment) => assignment.userId === memberId)
+    );
+
+    // Priority order: HIGH > MEDIUM > LOW
+    const priorityOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 };
+
+    // Sort: first by priority (HIGH first), then alphabetically by title
+    return memberTasks.sort((a, b) => {
+      // Compare by priority
+      const priorityDiff = (priorityOrder[a.priority as keyof typeof priorityOrder] ?? 99) -
+                          (priorityOrder[b.priority as keyof typeof priorityOrder] ?? 99);
+      if (priorityDiff !== 0) {
+        return priorityDiff;
+      }
+      // If same priority, sort alphabetically by title
+      return a.title.localeCompare(b.title);
+    });
   };
 
   const toggleExpand = (projectId: number) => {
@@ -330,33 +388,90 @@ export default function ProjectsPage() {
                       {project.members.length === 0 ? (
                         <p className="text-sm text-gray-500">No members</p>
                       ) : (
-                        <div className="space-y-1">
+                        <div className="space-y-3">
                           {project.members.map((member) => {
                             const isAdmin = project.admins.some(
                               (a) => a.user.id === member.user.id
                             );
+                            const memberTasks = getTasksForMember(project, member.user.id);
                             return (
                               <div
                                 key={member.id}
-                                className="flex justify-between items-center text-sm bg-white p-2 rounded border"
+                                className="bg-white p-3 rounded border"
                               >
-                                <span>
-                                  {member.user.email}
-                                  {isAdmin && (
-                                    <span className="ml-2 text-xs text-blue-600">
-                                      (Admin)
-                                    </span>
+                                <div className="flex justify-between items-center mb-2">
+                                  <span className="text-sm font-medium">
+                                    {member.user.email}
+                                    {isAdmin && (
+                                      <span className="ml-2 text-xs text-blue-600">
+                                        (Admin)
+                                      </span>
+                                    )}
+                                    {memberTasks.length > 0 && (
+                                      <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                                        {memberTasks.length} task{memberTasks.length !== 1 ? "s" : ""}
+                                      </span>
+                                    )}
+                                  </span>
+                                  {canManage && (
+                                    <button
+                                      onClick={() =>
+                                        removeMember(project.id, member.user.id)
+                                      }
+                                      className="text-red-600 hover:underline text-xs"
+                                    >
+                                      Remove Member
+                                    </button>
                                   )}
-                                </span>
-                                {canManage && (
-                                  <button
-                                    onClick={() =>
-                                      removeMember(project.id, member.user.id)
-                                    }
-                                    className="text-red-600 hover:underline text-xs"
-                                  >
-                                    Remove
-                                  </button>
+                                </div>
+                                {memberTasks.length > 0 && (
+                                  <div className="ml-2 mt-2 space-y-1 border-l-2 border-gray-200 pl-3">
+                                    <p className="text-xs font-semibold text-gray-600 mb-1">
+                                      Assigned Tasks:
+                                    </p>
+                                    {memberTasks.map((task) => (
+                                      <div
+                                        key={task.id}
+                                        className="flex justify-between items-center text-xs bg-gray-50 p-2 rounded"
+                                      >
+                                        <div className="flex-1">
+                                          <span className="font-medium">{task.title}</span>
+                                          {task.description && (
+                                            <span className="text-gray-500 ml-2">
+                                              - {task.description.substring(0, 50)}
+                                              {task.description.length > 50 ? "..." : ""}
+                                            </span>
+                                          )}
+                                          <div className="flex gap-2 mt-1">
+                                            <span className={`px-1.5 py-0.5 rounded text-xs ${
+                                              task.priority === "HIGH" ? "bg-red-100 text-red-700" :
+                                              task.priority === "MEDIUM" ? "bg-yellow-100 text-yellow-700" :
+                                              "bg-green-100 text-green-700"
+                                            }`}>
+                                              {task.priority}
+                                            </span>
+                                            <span className={`px-1.5 py-0.5 rounded text-xs ${
+                                              task.completed ? "bg-green-100 text-green-700" :
+                                              task.status === "IN_PROGRESS" ? "bg-blue-100 text-blue-700" :
+                                              "bg-gray-100 text-gray-700"
+                                            }`}>
+                                              {task.status}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        {canManage && (
+                                          <button
+                                            onClick={() =>
+                                              unassignTask(member.user.id, task.id)
+                                            }
+                                            className="ml-2 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
+                                          >
+                                            Remove
+                                          </button>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
                                 )}
                               </div>
                             );
