@@ -26,7 +26,10 @@ export async function POST(req: Request) {
       where: { id: taskId },
       include: {
         project: {
-          include: { admins: true },
+          include: { 
+            admins: true,
+            members: true,
+          },
         },
       },
     });
@@ -45,6 +48,20 @@ export async function POST(req: Request) {
         { error: "Forbidden - Only project admins or global admins can assign tasks" },
         { status: 403 }
       );
+    }
+
+    // Check if task belongs to a project
+    if (task.projectId) {
+      // Verify if the user to be assigned is a member or admin of the project
+      const isUserProjectMember = task.project!.members.some((member) => member.userId === userId);
+      const isUserProjectAdmin = task.project!.admins.some((admin) => admin.userId === userId);
+
+      if (!isUserProjectMember && !isUserProjectAdmin) {
+        return NextResponse.json(
+          { error: "This user is not eligible for this task" },
+          { status: 400 }
+        );
+      }
     }
 
     const assignment = await prisma.usersOnTasks.create({

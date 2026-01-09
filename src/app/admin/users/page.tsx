@@ -181,7 +181,10 @@ export default function AdminUsersPage() {
     <div className="max-w-4xl mx-auto p-6 mt-10 bg-white rounded-xl shadow">
       <h1 className="text-2xl font-bold mb-4">Admin Panel – Users</h1>
 
-      <MessageBanner message={message} />
+      <MessageBanner 
+        message={message} 
+        type={message.toLowerCase().includes("error") || message.toLowerCase().includes("not eligible") ? "error" : "success"}
+      />
 
       <ul className="space-y-3">
         {users.map((user) => {
