@@ -20,7 +20,7 @@ export default function TasksList({
 }: TasksListProps) {
   return (
     <div className={tasks.length > 0 ? "mb-4" : ""}>
-      <h3 className="font-semibold text-gray-700 mb-2">
+      <h3 className="font-bold text-red-900 mb-2" style={{ fontFamily: "'Pirata One', cursive" }}>
         {title} ({tasks.length})
       </h3>
       {tasks.length > 0 ? (
@@ -36,7 +36,7 @@ export default function TasksList({
           ))}
         </ul>
       ) : (
-        <p className="text-gray-500 text-sm italic">{emptyMessage}</p>
+        <p className="text-red-800 text-sm italic font-semibold">{emptyMessage}</p>
       )}
     </div>
   );

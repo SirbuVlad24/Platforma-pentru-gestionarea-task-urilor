@@ -7,7 +7,7 @@ export async function DELETE(req: Request) {
 
     if (!id) {
       return NextResponse.json(
-        { error: "Task ID is required" },
+        { error: "We need the mission ID to remove it from the logbook, Captain!" },
         { status: 400 }
       );
     }
@@ -20,7 +20,7 @@ export async function DELETE(req: Request) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { error: "Server error" },
+      { error: "Something went wrong on the ship, Captain! Check the logs!" },
       { status: 500 }
     );
   }

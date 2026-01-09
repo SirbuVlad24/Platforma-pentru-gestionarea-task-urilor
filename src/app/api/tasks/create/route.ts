@@ -9,14 +9,14 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return NextResponse.json({ error: "Ye must be logged in to board this ship, sailor!" }, { status: 401 });
     }
 
     const { title, description, priority, projectId } = await req.json();
 
     if (!title) {
       return NextResponse.json(
-        { error: "Title is required" },
+        { error: "Every mission needs a name, Captain! What shall we call it?" },
         { status: 400 }
       );
     }
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       });
 
       if (!project) {
-        return NextResponse.json({ error: "Project not found" }, { status: 404 });
+        return NextResponse.json({ error: "This ship doesn't exist in the fleet, Captain!" }, { status: 404 });
       }
 
       isProjectAdmin = project.admins.some((admin) => admin.userId === session.user.id);
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
     if (!isGlobalAdmin && !isProjectAdmin && projectId) {
       return NextResponse.json(
-        { error: "Forbidden - Only project admins or global admins can create tasks for projects" },
+        { error: "Only the Captain can log missions for this ship, ye scallywag!" },
         { status: 403 }
       );
     }
@@ -50,10 +50,10 @@ export async function POST(req: Request) {
     let finalPriority = priority;
     if (description && description.trim().length > 0) {
       // Always use AI when description exists, ignore manual priority selection
-      console.log("🔍 Detecting priority from description using AI...");
+      console.log("Detecting priority from description using AI...");
       const aiPriority = await detectTaskPriority(description);
       finalPriority = aiPriority;
-      console.log(`✅ AI detected priority: ${aiPriority} for description: "${description.substring(0, 50)}..."`);
+      console.log(`AI detected priority: ${aiPriority} for description: "${description.substring(0, 50)}..."`);
     } else if (!finalPriority) {
       finalPriority = "MEDIUM";
     }
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { error: "Server error" },
+      { error: "Something went wrong on the ship, Captain! Check the logs!" },
       { status: 500 }
     );
   }

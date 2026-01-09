@@ -8,13 +8,13 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return NextResponse.json({ error: "Ye must be logged in to board this ship, sailor!" }, { status: 401 });
     }
 
     const { userId, taskId } = await req.json();
 
     if (!userId || !taskId) {
-      return NextResponse.json({ error: "userId and taskId required" }, { status: 400 });
+      return NextResponse.json({ error: "Ahoy! We need both the crew member and mission details, Captain!" }, { status: 400 });
     }
 
     // Check permissions: Global admin or project admin of the task's project
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     });
 
     if (!task) {
-      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+      return NextResponse.json({ error: "This mission doesn't exist in the logbook, Captain!" }, { status: 404 });
     }
 
     let isProjectAdmin = false;
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     if (!isGlobalAdmin && !isProjectAdmin) {
       return NextResponse.json(
-        { error: "Forbidden - Only project admins or global admins can unassign tasks" },
+        { error: "Only the Captain can unassign missions from the crew, ye scallywag!" },
         { status: 403 }
       );
     }
@@ -50,9 +50,9 @@ export async function POST(req: Request) {
       where: { userId, taskId },
     });
 
-    return NextResponse.json({ message: "User removed from task" });
+    return NextResponse.json({ message: "Crew member removed from mission successfully!" });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ error: "Something went wrong on the ship, Captain! Check the logs!" }, { status: 500 });
   }
 }
