@@ -16,7 +16,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Only the Captain can edit the logbook, ye scallywag!" }, { status: 403 });
     }
 
-    const { id, title, description, priority, status, completed, projectId } = await req.json();
+    const { id, title, description, priority, status, completed, projectId, deadline } = await req.json();
 
     if (!id) {
       return NextResponse.json(
@@ -31,6 +31,7 @@ export async function PUT(req: Request) {
     if (status !== undefined) updateData.status = status;
     if (completed !== undefined) updateData.completed = completed;
     if (projectId !== undefined) updateData.projectId = projectId;
+    if (deadline !== undefined) updateData.deadline = deadline ? new Date(deadline) : null;
 
     // If description is updated and priority is not explicitly set, auto-detect priority
     if (description !== undefined && priority === undefined) {
@@ -43,6 +44,9 @@ export async function PUT(req: Request) {
     const updatedTask = await prisma.task.update({
       where: { id },
       data: updateData,
+      include: {
+        assignedUsers: true,
+      },
     });
 
     return NextResponse.json({ task: updatedTask });

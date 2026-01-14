@@ -98,6 +98,7 @@ export default function UserTasksPage() {
             description={task.description}
             priority={task.priority}
             status={task.status}
+            deadline={task.deadline}
             onComplete={() => {
               // Refresh tasks after completion
               fetch("/api/tasks/my-tasks")

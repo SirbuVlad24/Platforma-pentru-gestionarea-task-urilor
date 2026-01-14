@@ -59,6 +59,4 @@ npm run dev
 - **Facade Pattern**: `TaskCompletionFacade` for task completion logic
 - **Adapter Pattern**: NextAuth PrismaAdapter for authentication
 
-## License
 
-MIT

@@ -13,6 +13,7 @@ type Task = {
   completed: boolean;
   projectId?: number;
   project?: { id: number; name: string };
+  deadline?: string | null;
 };
 
 export default function ManageAdminTasksPage() {
@@ -28,6 +29,7 @@ export default function ManageAdminTasksPage() {
     description: "",
     priority: "MEDIUM",
     projectId: "",
+    deadline: "",
   });
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -106,6 +108,11 @@ export default function ManageAdminTasksPage() {
       }
     }
 
+    // Add deadline if provided
+    if (form.deadline && form.deadline.trim() !== "") {
+      payload.deadline = form.deadline;
+    }
+
     try {
       const res = await fetch("/api/tasks/create", {
         method: "POST",
@@ -122,7 +129,7 @@ export default function ManageAdminTasksPage() {
 
       const data = await res.json();
 
-      setForm({ title: "", description: "", priority: "MEDIUM", projectId: "" });
+      setForm({ title: "", description: "", priority: "MEDIUM", projectId: "", deadline: "" });
       await fetchTasks();
     } catch (err) {
       console.error("Error creating task:", err);
@@ -237,6 +244,24 @@ export default function ManageAdminTasksPage() {
           )}
         </div>
 
+        <div className="mb-2">
+          <label className="block text-sm font-bold text-red-900 mb-1 flex items-center gap-2">
+            <span>⏰</span>
+            Mission Deadline (when must this be completed?)
+          </label>
+          <input
+            type="datetime-local"
+            className="w-full border-2 border-black bg-white p-2 rounded text-red-900 font-semibold"
+            value={form.deadline}
+            onChange={(e) =>
+              setForm({ ...form, deadline: e.target.value })
+            }
+          />
+          <p className="text-xs text-red-800 mt-1 font-semibold">
+            Leave empty if there's no deadline, Captain!
+          </p>
+        </div>
+
         <button
           onClick={createTask}
           className="bg-red-800 text-yellow-400 px-4 py-2 rounded hover:bg-red-900 transition font-bold shadow-lg hover:shadow-xl flex items-center gap-2 justify-center border-2 border-black"
@@ -277,6 +302,9 @@ export default function ManageAdminTasksPage() {
                   <span>⚓ Priority:</span> {task.priority} | <span>Status:</span> {task.status || "TODO"}
                   {task.project && (
                     <span className="ml-2 text-red-900 font-bold">| 🚢 Ship: {task.project.name}</span>
+                  )}
+                  {task.deadline && (
+                    <span className="ml-2 text-red-900 font-bold">| ⏰ Deadline: {new Date(task.deadline).toLocaleString()}</span>
                   )}
                 </p>
               </div>
@@ -363,7 +391,7 @@ export default function ManageAdminTasksPage() {
             </p>
 
             <select
-              className="w-full border-2 border-purple-400 bg-purple-50 p-2 rounded mb-4 text-purple-900"
+              className="w-full border-2 border-purple-400 bg-purple-50 p-2 rounded mb-2 text-purple-900"
               value={editingTask.status || "TODO"}
               onChange={(e) =>
                 setEditingTask({ ...editingTask, status: e.target.value })
@@ -373,6 +401,24 @@ export default function ManageAdminTasksPage() {
               <option value="IN_PROGRESS">In Progress</option>
               <option value="DONE">Done</option>
             </select>
+
+            <div className="mb-4">
+              <label className="block text-sm font-bold text-red-900 mb-1 flex items-center gap-2">
+                <span>⏰</span>
+                Mission Deadline
+              </label>
+              <input
+                type="datetime-local"
+                className="w-full border-2 border-black bg-white p-2 rounded text-red-900 font-semibold"
+                value={editingTask.deadline ? new Date(editingTask.deadline).toISOString().slice(0, 16) : ""}
+                onChange={(e) =>
+                  setEditingTask({ ...editingTask, deadline: e.target.value || null })
+                }
+              />
+              <p className="text-xs text-red-800 mt-1 font-semibold">
+                Leave empty to remove deadline, Captain!
+              </p>
+            </div>
 
             <div className="flex justify-end gap-3">
               <button

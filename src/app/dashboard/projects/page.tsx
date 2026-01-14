@@ -11,6 +11,7 @@ type Task = {
   completed: boolean;
   priority: string;
   status: string;
+  deadline?: string | null;
   assignedUsers: Array<{
     id: number;
     userId: string;
@@ -49,6 +50,16 @@ type User = {
 export default function ProjectsPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update current time every 10 seconds for live deadline tracking
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 10000); // Update every 10 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -356,11 +367,20 @@ export default function ProjectsPage() {
             // Check if all tasks in the project are completed
             const allTasksCompleted = project.tasks.length > 0 && 
               project.tasks.every((task) => task.status === "DONE");
+            
+            // Check if project has missed tasks (deadline passed but not completed)
+            const hasMissedTasks = project.tasks.some((task) => {
+              if (!task.deadline) return false;
+              const deadlineDate = new Date(task.deadline);
+              return deadlineDate < currentTime && task.status !== "DONE";
+            });
+            
+            const isProjectClosed = hasMissedTasks;
 
             return (
               <div
                 key={project.id}
-                className={`${allTasksCompleted ? "bg-gray-300 opacity-75 border-gray-600" : "bg-red-100 border-black"} border-4 rounded-lg shadow-xl overflow-hidden`}
+                className={`${allTasksCompleted ? "bg-gray-300 opacity-75 border-gray-600" : isProjectClosed ? "bg-red-300 opacity-75 border-red-600" : "bg-red-100 border-black"} border-4 rounded-lg shadow-xl overflow-hidden`}
               >
                 <div
                   className="p-4 cursor-pointer hover:bg-red-200 transition"
@@ -368,7 +388,7 @@ export default function ProjectsPage() {
                 >
                   <div className="flex justify-between items-center">
                     <div>
-                      <h3 className={`text-lg font-bold flex items-center gap-2 ${allTasksCompleted ? "text-gray-800" : "text-red-900"}`} style={{ fontFamily: "'Pirata One', cursive" }}>
+                      <h3 className={`text-lg font-bold flex items-center gap-2 ${allTasksCompleted ? "text-gray-800" : isProjectClosed ? "text-red-900" : "text-red-900"}`} style={{ fontFamily: "'Pirata One', cursive" }}>
                         <span>🚢</span>
                         {project.name}
                         {allTasksCompleted && (
@@ -376,9 +396,14 @@ export default function ProjectsPage() {
                             ⚓ Voyage Completed - All Treasure Plundered! ⚓
                           </span>
                         )}
+                        {isProjectClosed && !allTasksCompleted && (
+                          <span className="text-sm bg-red-500 text-yellow-200 px-3 py-1 rounded-full border-2 border-black font-bold">
+                            ❌ Ship Closed - Mission Failed! ❌
+                          </span>
+                        )}
                       </h3>
                       {project.description && (
-                        <p className={`text-sm mt-1 font-semibold ${allTasksCompleted ? "text-gray-700" : "text-red-800"}`}>
+                        <p className={`text-sm mt-1 font-semibold ${allTasksCompleted ? "text-gray-700" : isProjectClosed ? "text-red-900" : "text-red-800"}`}>
                           {project.description}
                         </p>
                       )}
@@ -387,20 +412,25 @@ export default function ProjectsPage() {
                           "This ship has completed all its missions! The crew has returned victorious with all the treasure!"
                         </p>
                       )}
-                      <div className={`flex gap-4 mt-2 text-xs font-bold ${allTasksCompleted ? "text-gray-700" : "text-red-900"}`}>
+                      {isProjectClosed && !allTasksCompleted && (
+                        <p className="text-sm mt-2 font-bold text-red-900 italic" style={{ fontFamily: "'Pirata One', cursive" }}>
+                          "This ship has failed its mission! A task deadline has passed without completion. The ship is closed!"
+                        </p>
+                      )}
+                      <div className={`flex gap-4 mt-2 text-xs font-bold ${allTasksCompleted ? "text-gray-700" : isProjectClosed ? "text-red-900" : "text-red-900"}`}>
                         <span>📜 {project._count.tasks} missions</span>
                         <span>⚓ {project._count.members} crew</span>
                         <span>🏴‍☠️ {project._count.admins} captains</span>
                       </div>
                     </div>
-                    <span className={`text-2xl ${allTasksCompleted ? "text-gray-700" : "text-red-900"}`}>
+                    <span className={`text-2xl ${allTasksCompleted ? "text-gray-700" : isProjectClosed ? "text-red-900" : "text-red-900"}`}>
                       {isExpanded ? "▼" : "▶"}
                     </span>
                   </div>
                 </div>
 
                 {isExpanded && (
-                  <div className={`border-t-4 ${allTasksCompleted ? "border-gray-600 bg-gray-100" : "border-black bg-red-50"} p-4`}>
+                  <div className={`border-t-4 ${allTasksCompleted ? "border-gray-600 bg-gray-100" : isProjectClosed ? "border-red-600 bg-red-200" : "border-black bg-red-50"} p-4`}>
                     <div className="mb-4">
                       <h4 className="font-bold mb-2 text-red-900 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
                         <span>🏴‍☠️</span>
@@ -483,19 +513,45 @@ export default function ProjectsPage() {
                                     </p>
                                     {memberTasks.map((task) => {
                                       const isTaskDone = task.status === "DONE";
+                                      const isTaskMissed = task.deadline && new Date(task.deadline) < currentTime && !isTaskDone;
                                       return (
                                         <div
                                           key={task.id}
-                                          className={`flex justify-between items-center text-xs p-2 rounded border-2 border-black ${isTaskDone ? "bg-gray-200 opacity-75" : "bg-red-100"}`}
+                                          className={`flex justify-between items-center text-xs p-2 rounded border-2 border-black ${isTaskDone ? "bg-gray-200 opacity-75" : isTaskMissed ? "bg-red-200 opacity-75" : "bg-red-100"}`}
                                         >
                                           <div className="flex-1">
-                                            <span className={`font-bold ${isTaskDone ? "text-gray-700" : "text-red-900"}`}>{task.title}</span>
+                                            <span className={`font-bold ${isTaskDone ? "text-gray-700" : isTaskMissed ? "text-red-900" : "text-red-900"}`}>
+                                              {task.title}
+                                              {isTaskMissed && <span className="ml-1 text-xs bg-red-300 text-red-900 px-1 py-0.5 rounded border border-black">❌ Missed</span>}
+                                            </span>
                                             {task.description && (
-                                              <span className={`ml-2 font-semibold ${isTaskDone ? "text-gray-600" : "text-red-800"}`}>
+                                              <span className={`ml-2 font-semibold ${isTaskDone ? "text-gray-600" : isTaskMissed ? "text-red-800" : "text-red-800"}`}>
                                                 - {task.description.substring(0, 50)}
                                                 {task.description.length > 50 ? "..." : ""}
                                               </span>
                                             )}
+                                            {task.deadline && (() => {
+                                              const deadlineDate = new Date(task.deadline);
+                                              const isOverdue = deadlineDate < currentTime;
+                                              const timeUntilDeadline = deadlineDate.getTime() - currentTime.getTime();
+                                              const isDueSoon = timeUntilDeadline > 0 && timeUntilDeadline < 24 * 60 * 60 * 1000; // Less than 24 hours
+                                              
+                                              return (
+                                                <div className="mt-1">
+                                                  <span className={`text-xs px-2 py-1 rounded border border-black font-bold ${
+                                                    isOverdue
+                                                      ? "bg-red-300 text-red-900" 
+                                                      : isDueSoon
+                                                      ? "bg-yellow-200 text-yellow-900"
+                                                      : "bg-blue-200 text-blue-900"
+                                                  }`}>
+                                                    ⏰ {deadlineDate.toLocaleString()}
+                                                    {isOverdue && " ⚠️ OVERDUE!"}
+                                                    {isDueSoon && !isOverdue && " ⚠️ Due Soon!"}
+                                                  </span>
+                                                </div>
+                                              );
+                                            })()}
                                             <div className="flex gap-2 mt-1 flex-wrap">
                                               <span className={`px-1.5 py-0.5 rounded text-xs font-bold border border-black ${
                                                 task.priority === "HIGH" ? "bg-red-200 text-red-900" :
@@ -506,14 +562,16 @@ export default function ProjectsPage() {
                                               </span>
                                               <span className={`px-1.5 py-0.5 rounded text-xs font-bold border border-black ${
                                                 isTaskDone ? "bg-green-200 text-green-900" :
+                                                isTaskMissed ? "bg-red-300 text-red-900" :
                                                 task.status === "IN_PROGRESS" ? "bg-blue-200 text-blue-900" :
                                                 "bg-gray-200 text-gray-900"
                                               }`}>
                                                 {isTaskDone ? "✅ Completed Voyage" :
+                                                 isTaskMissed ? "❌ Mission Missed" :
                                                  task.status === "IN_PROGRESS" ? "⚓ Underway" :
                                                  "📜 To Do (Awaiting Orders)"}
                                               </span>
-                                              {!isTaskDone && (
+                                              {!isTaskDone && !isTaskMissed && (
                                                 <button
                                                   onClick={async () => {
                                                     try {
