@@ -2,6 +2,7 @@ export type User = {
   id: string;
   email: string;
   role: "USER" | "ADMIN";
+  projectIds?: number[];
 };
 
 export type Task = {
@@ -12,6 +13,11 @@ export type Task = {
   priority: "LOW" | "MEDIUM" | "HIGH";
   status?: "TODO" | "IN_PROGRESS" | "DONE";
   createdAt: string;
+  deadline?: string | null;
+  project?: {
+    id: number;
+    name: string;
+  } | null;
   assignedUsers: {
     id: number;
     userId: string;

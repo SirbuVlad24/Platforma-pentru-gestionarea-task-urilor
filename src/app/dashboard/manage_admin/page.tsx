@@ -30,6 +30,7 @@ export default function ManageAdminTasksPage() {
     priority: "MEDIUM",
     projectId: "",
     deadline: "",
+    useAI: false,
   });
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -89,14 +90,14 @@ export default function ManageAdminTasksPage() {
   const createTask = async () => {
     if (!form.title.trim()) return;
 
-    // Don't send priority if description exists - let AI detect it
     const payload: any = {
       title: form.title,
       description: form.description,
+      useAI: form.useAI,
     };
     
-    // Only send priority if there's no description
-    if (!form.description.trim()) {
+    // Only send priority if AI is not being used
+    if (!form.useAI) {
       payload.priority = form.priority;
     }
 
@@ -129,7 +130,7 @@ export default function ManageAdminTasksPage() {
 
       const data = await res.json();
 
-      setForm({ title: "", description: "", priority: "MEDIUM", projectId: "", deadline: "" });
+      setForm({ title: "", description: "", priority: "MEDIUM", projectId: "", deadline: "", useAI: false });
       await fetchTasks();
     } catch (err) {
       console.error("Error creating task:", err);
@@ -216,9 +217,23 @@ export default function ManageAdminTasksPage() {
         </select>
 
         <div className="mb-2">
+          <label className="flex items-center gap-2 mb-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.useAI}
+              onChange={(e) =>
+                setForm({ ...form, useAI: e.target.checked })
+              }
+              className="w-5 h-5 border-2 border-black text-red-900 focus:ring-2 focus:ring-red-900"
+            />
+            <span className="text-sm font-bold text-red-900 flex items-center gap-2">
+              <span>🤖</span>
+              Use AI to detect priority from mission details
+            </span>
+          </label>
           <label className="block text-sm font-bold text-red-900 mb-1 flex items-center gap-2">
             <span>⚓</span>
-            Mission Priority (will be auto-detected from danger level)
+            Mission Priority
           </label>
           <select
             className="w-full border-2 border-black bg-white p-2 rounded text-red-900 font-semibold"
@@ -226,20 +241,20 @@ export default function ManageAdminTasksPage() {
             onChange={(e) =>
               setForm({ ...form, priority: e.target.value })
             }
-            disabled={form.description.trim().length > 0}
+            disabled={form.useAI}
           >
             <option value="LOW">LOW</option>
             <option value="MEDIUM">MEDIUM</option>
             <option value="HIGH">HIGH</option>
           </select>
-          {form.description.trim().length > 0 && (
+          {form.useAI && (
             <p className="text-xs text-yellow-700 mt-1 font-bold bg-yellow-100 p-2 rounded border border-black">
               ⚓ Priority will be auto-detected from mission details using the Captain's wisdom!
             </p>
           )}
-          {form.description.trim().length === 0 && (
+          {!form.useAI && (
             <p className="text-xs text-red-800 mt-1 font-semibold">
-              Add mission details to enable automatic priority detection, Captain!
+              Select priority manually, or enable AI detection above, Captain!
             </p>
           )}
         </div>
@@ -284,48 +299,98 @@ export default function ManageAdminTasksPage() {
           No missions logged yet! Time to set sail, Captain!
         </p>
       ) : (
-        <ul className="space-y-4">
-          {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="bg-red-100 p-4 rounded-lg shadow-lg border-4 border-black flex justify-between"
-            >
-              <div className="flex-1">
-                <p className="font-bold text-red-900 text-lg flex items-center gap-2">
-                  <span>📜</span>
-                  {task.title}
-                </p>
-                {task.description && (
-                  <p className="text-sm text-red-800 mt-1 mb-1 font-semibold">{task.description}</p>
-                )}
-                <p className="text-sm text-red-900 font-bold">
-                  <span>⚓ Priority:</span> {task.priority} | <span>Status:</span> {task.status || "TODO"}
-                  {task.project && (
-                    <span className="ml-2 text-red-900 font-bold">| 🚢 Ship: {task.project.name}</span>
-                  )}
-                  {task.deadline && (
-                    <span className="ml-2 text-red-900 font-bold">| ⏰ Deadline: {new Date(task.deadline).toLocaleString()}</span>
-                  )}
-                </p>
-              </div>
+        <div className="space-y-6">
+          {(() => {
+            // Group tasks by project
+            const tasksByProject = new Map<number | "none", Task[]>();
+            
+            tasks.forEach(task => {
+              const key = task.projectId || "none";
+              if (!tasksByProject.has(key)) {
+                tasksByProject.set(key, []);
+              }
+              tasksByProject.get(key)!.push(task);
+            });
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setEditingTask({ ...task, status: task.status || "TODO" })}
-                  className="px-3 py-1 bg-yellow-500 text-red-900 rounded hover:bg-yellow-600 transition font-bold shadow border-2 border-black"
-                >
-                  ✏️ Edit
-                </button>
-                <button
-                  onClick={() => deleteTask(task.id)}
-                  className="px-3 py-1 bg-red-800 text-yellow-400 rounded hover:bg-red-900 transition font-bold shadow border-2 border-black"
-                >
-                  ❌ Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+            const renderTaskItem = (task: Task) => (
+              <li
+                key={task.id}
+                className="bg-red-100 p-4 rounded-lg shadow-lg border-4 border-black flex justify-between"
+              >
+                <div className="flex-1">
+                  <p className="font-bold text-red-900 text-lg flex items-center gap-2">
+                    <span>📜</span>
+                    {task.title}
+                  </p>
+                  {task.description && (
+                    <p className="text-sm text-red-800 mt-1 mb-1 font-semibold">{task.description}</p>
+                  )}
+                  <p className="text-sm text-red-900 font-bold">
+                    <span>⚓ Priority:</span> {task.priority} | <span>Status:</span> {task.status || "TODO"}
+                    {task.deadline && (
+                      <span className="ml-2 text-red-900 font-bold">| ⏰ Deadline: {new Date(task.deadline).toLocaleString()}</span>
+                    )}
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setEditingTask({ ...task, status: task.status || "TODO" })}
+                    className="px-3 py-1 bg-yellow-500 text-red-900 rounded hover:bg-yellow-600 transition font-bold shadow border-2 border-black"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    className="px-3 py-1 bg-red-800 text-yellow-400 rounded hover:bg-red-900 transition font-bold shadow border-2 border-black"
+                  >
+                    ❌ Delete
+                  </button>
+                </div>
+              </li>
+            );
+
+            return (
+              <>
+                {/* Render tasks with projects */}
+                {projects.map(project => {
+                  const projectTasks = tasksByProject.get(project.id) || [];
+                  if (projectTasks.length === 0) return null;
+                  
+                  return (
+                    <div key={project.id} className="bg-blue-50 rounded-lg border-4 border-blue-600 p-4 shadow-lg">
+                      <h2 className="text-xl font-bold text-blue-900 mb-4 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+                        <span>🚢</span>
+                        {project.name}
+                      </h2>
+                      <ul className="space-y-3">
+                        {projectTasks.map(renderTaskItem)}
+                      </ul>
+                    </div>
+                  );
+                })}
+
+                {/* Render tasks without project */}
+                {(() => {
+                  const tasksWithoutProject = tasksByProject.get("none") || [];
+                  if (tasksWithoutProject.length === 0) return null;
+                  
+                  return (
+                    <div className="bg-gray-100 rounded-lg border-4 border-gray-500 p-4 shadow-lg">
+                      <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2" style={{ fontFamily: "'Pirata One', cursive" }}>
+                        <span>📜</span>
+                        Missions Without Ship
+                      </h2>
+                      <ul className="space-y-3">
+                        {tasksWithoutProject.map(renderTaskItem)}
+                      </ul>
+                    </div>
+                  );
+                })()}
+              </>
+            );
+          })()}
+        </div>
       )}
 
       {/* Edit Modal */}

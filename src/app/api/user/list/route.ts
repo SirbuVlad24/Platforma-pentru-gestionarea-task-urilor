@@ -13,10 +13,25 @@ export async function GET() {
 
 
   const users = await prisma.user.findMany({
-    select: { id: true, email: true, role: true },
+    select: { 
+      id: true, 
+      email: true, 
+      role: true,
+      projects: {
+        select: {
+          projectId: true,
+        },
+      },
+    },
   });
 
+  // Format users to include projectIds
+  const formattedUsers = users.map(user => ({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    projectIds: user.projects.map(p => p.projectId),
+  }));
 
-
-  return NextResponse.json({ users: users || [] });
+  return NextResponse.json({ users: formattedUsers || [] });
 }

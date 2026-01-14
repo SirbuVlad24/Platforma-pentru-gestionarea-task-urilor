@@ -30,6 +30,12 @@ export async function GET() {
         createdAt: true,
         deadline: true,
         projectId: true,
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         assignedUsers: {
           include: {
             user: {

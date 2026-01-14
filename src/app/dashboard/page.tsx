@@ -235,7 +235,7 @@ export default function Dashboard() {
 
           <button
             onClick={() => router.push("/dashboard/projects")}
-            className="w-full py-8 px-8 bg-red-900 text-yellow-400 rounded-xl hover:bg-black transition font-bold shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-start gap-4 border-4 border-black text-2xl"
+            className="w-full py-8 px-8 bg-red-700 text-yellow-400 rounded-xl hover:bg-red-800 transition font-bold shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-start gap-4 border-4 border-black text-2xl"
             style={{ fontFamily: "'Pirata One', cursive", minHeight: "120px" }}
           >
             <span className="text-4xl">🚢</span>

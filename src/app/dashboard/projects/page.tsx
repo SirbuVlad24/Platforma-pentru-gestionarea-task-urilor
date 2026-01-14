@@ -75,7 +75,10 @@ export default function ProjectsPage() {
       return;
     }
     fetchProjects();
-    fetchUsers();
+    // Only fetch users if user is a global ADMIN (required for user list API)
+    if (session.user.role === "ADMIN") {
+      fetchUsers();
+    }
   }, [session, router]);
 
   const fetchProjects = async () => {
@@ -517,59 +520,56 @@ export default function ProjectsPage() {
                                       return (
                                         <div
                                           key={task.id}
-                                          className={`flex justify-between items-center text-xs p-2 rounded border-2 border-black ${isTaskDone ? "bg-gray-200 opacity-75" : isTaskMissed ? "bg-red-200 opacity-75" : "bg-red-100"}`}
+                                          className={`flex justify-between items-start p-3 rounded-lg border-2 border-black shadow-md mb-2 ${isTaskDone ? "bg-gray-200 opacity-75" : isTaskMissed ? "bg-red-200 opacity-75" : "bg-red-100"}`}
                                         >
-                                          <div className="flex-1">
-                                            <span className={`font-bold ${isTaskDone ? "text-gray-700" : isTaskMissed ? "text-red-900" : "text-red-900"}`}>
+                                          <div className="flex-1 min-w-0">
+                                            <h4 className={`text-sm font-bold mb-1 ${isTaskDone ? "text-gray-700" : isTaskMissed ? "text-red-900" : "text-red-900"}`} style={{ fontFamily: "'Pirata One', cursive" }}>
                                               {task.title}
-                                              {isTaskMissed && <span className="ml-1 text-xs bg-red-300 text-red-900 px-1 py-0.5 rounded border border-black">❌ Missed</span>}
-                                            </span>
+                                            </h4>
                                             {task.description && (
-                                              <span className={`ml-2 font-semibold ${isTaskDone ? "text-gray-600" : isTaskMissed ? "text-red-800" : "text-red-800"}`}>
-                                                - {task.description.substring(0, 50)}
-                                                {task.description.length > 50 ? "..." : ""}
-                                              </span>
+                                              <p className={`text-xs mb-2 ${isTaskDone ? "text-gray-600" : isTaskMissed ? "text-red-800" : "text-red-800"}`}>
+                                                {task.description.substring(0, 80)}
+                                                {task.description.length > 80 ? "..." : ""}
+                                              </p>
                                             )}
-                                            {task.deadline && (() => {
-                                              const deadlineDate = new Date(task.deadline);
-                                              const isOverdue = deadlineDate < currentTime;
-                                              const timeUntilDeadline = deadlineDate.getTime() - currentTime.getTime();
-                                              const isDueSoon = timeUntilDeadline > 0 && timeUntilDeadline < 24 * 60 * 60 * 1000; // Less than 24 hours
-                                              
-                                              return (
-                                                <div className="mt-1">
-                                                  <span className={`text-xs px-2 py-1 rounded border border-black font-bold ${
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                              {task.deadline && (() => {
+                                                const deadlineDate = new Date(task.deadline);
+                                                const isOverdue = deadlineDate < currentTime;
+                                                const timeUntilDeadline = deadlineDate.getTime() - currentTime.getTime();
+                                                const isDueSoon = timeUntilDeadline > 0 && timeUntilDeadline < 24 * 60 * 60 * 1000; // Less than 24 hours
+                                                
+                                                return (
+                                                  <span className={`px-2 py-1 rounded-lg text-xs font-bold border-2 ${
                                                     isOverdue
-                                                      ? "bg-red-300 text-red-900" 
+                                                      ? "bg-red-300 text-red-900 border-red-400" 
                                                       : isDueSoon
-                                                      ? "bg-yellow-200 text-yellow-900"
-                                                      : "bg-blue-200 text-blue-900"
+                                                      ? "bg-yellow-200 text-yellow-900 border-yellow-400"
+                                                      : "bg-blue-200 text-blue-900 border-blue-400"
                                                   }`}>
                                                     ⏰ {deadlineDate.toLocaleString()}
                                                     {isOverdue && " ⚠️ OVERDUE!"}
                                                     {isDueSoon && !isOverdue && " ⚠️ Due Soon!"}
                                                   </span>
-                                                </div>
-                                              );
-                                            })()}
-                                            <div className="flex gap-2 mt-1 flex-wrap">
-                                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold border border-black ${
-                                                task.priority === "HIGH" ? "bg-red-200 text-red-900" :
-                                                task.priority === "MEDIUM" ? "bg-yellow-200 text-yellow-900" :
-                                                "bg-green-200 text-green-900"
+                                                );
+                                              })()}
+                                              <span className={`px-2 py-1 rounded-lg text-xs font-bold border-2 ${
+                                                task.priority === "HIGH" ? "bg-red-200 text-red-900 border-red-400" :
+                                                task.priority === "MEDIUM" ? "bg-yellow-200 text-yellow-900 border-yellow-400" :
+                                                "bg-green-200 text-green-900 border-green-400"
                                               }`}>
                                                 ⚓ {task.priority}
                                               </span>
-                                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold border border-black ${
-                                                isTaskDone ? "bg-green-200 text-green-900" :
-                                                isTaskMissed ? "bg-red-300 text-red-900" :
-                                                task.status === "IN_PROGRESS" ? "bg-blue-200 text-blue-900" :
-                                                "bg-gray-200 text-gray-900"
+                                              <span className={`px-2 py-1 rounded-lg text-xs font-bold border-2 ${
+                                                isTaskDone ? "bg-green-200 text-green-900 border-green-400" :
+                                                isTaskMissed ? "bg-red-300 text-red-900 border-red-400" :
+                                                task.status === "IN_PROGRESS" ? "bg-blue-200 text-blue-900 border-blue-400" :
+                                                "bg-gray-200 text-gray-900 border-gray-400"
                                               }`}>
                                                 {isTaskDone ? "✅ Completed Voyage" :
                                                  isTaskMissed ? "❌ Mission Missed" :
                                                  task.status === "IN_PROGRESS" ? "⚓ Underway" :
-                                                 "📜 To Do (Awaiting Orders)"}
+                                                 "📜 To Do"}
                                               </span>
                                               {!isTaskDone && !isTaskMissed && (
                                                 <button
@@ -599,16 +599,6 @@ export default function ProjectsPage() {
                                               )}
                                             </div>
                                           </div>
-                                          {canManage && (
-                                            <button
-                                              onClick={() =>
-                                                unassignTask(member.user.id, task.id)
-                                              }
-                                              className="ml-2 px-2 py-1 bg-red-800 text-yellow-400 rounded hover:bg-red-900 text-xs font-bold shadow border border-black"
-                                            >
-                                              ❌
-                                            </button>
-                                          )}
                                         </div>
                                       );
                                     })}

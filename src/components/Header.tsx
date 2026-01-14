@@ -55,9 +55,10 @@ export default function Header() {
 
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium"
+          className="px-5 py-2.5 bg-red-900 text-yellow-400 rounded-lg hover:bg-red-950 hover:text-yellow-300 transition-all font-bold shadow-lg hover:shadow-xl transform hover:scale-105 border-2 border-yellow-400 hover:border-yellow-300"
+          style={{ fontFamily: "'Pirata One', cursive", textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
         >
-          Logout
+          ⚓ Abandon Ship
         </button>
       </div>
     </header>

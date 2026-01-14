@@ -9,6 +9,10 @@ interface TaskCardProps {
   priority?: string;
   status?: string;
   deadline?: string | null;
+  project?: {
+    id: number;
+    name: string;
+  } | null;
   onComplete?: () => void;
 }
 
@@ -19,6 +23,7 @@ export default function TaskCard({
   priority,
   status,
   deadline,
+  project,
   onComplete,
 }: TaskCardProps) {
   const [isCompleting, setIsCompleting] = useState(false);
@@ -88,10 +93,16 @@ export default function TaskCard({
       <h3 className={`text-lg font-bold mb-2 flex items-center gap-2 ${isDone ? "text-gray-700" : isMissed ? "text-red-900" : "text-red-900"}`} style={{ fontFamily: "'Pirata One', cursive" }}>
         <span className="text-xl">📜</span>
         {title}
-        {isDone && <span className="text-sm bg-green-200 text-green-900 px-2 py-1 rounded border border-black">✅ Completed Voyage</span>}
-        {isMissed && <span className="text-sm bg-red-300 text-red-900 px-2 py-1 rounded border border-black">❌ Mission Missed</span>}
       </h3>
-      {description && <p className={`mb-2 font-semibold ${isDone ? "text-gray-600" : isMissed ? "text-red-800" : "text-red-800"}`}>{description}</p>}
+      {description && <p className={`mb-3 font-semibold ${isDone ? "text-gray-600" : isMissed ? "text-red-800" : "text-red-800"}`}>{description}</p>}
+
+      {project && (
+        <div className="mb-3">
+          <span className="inline-block px-3 py-2 rounded-lg text-base font-bold border-2 border-blue-400 bg-blue-200 text-blue-900 shadow-md">
+            🚢 {project.name}
+          </span>
+        </div>
+      )}
 
       {deadline && (() => {
         const deadlineDate = new Date(deadline);

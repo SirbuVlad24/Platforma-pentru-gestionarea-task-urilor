@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Ye must be logged in to board this ship, sailor!" }, { status: 401 });
     }
 
-    const { title, description, priority, projectId, deadline } = await req.json();
+    const { title, description, priority, projectId, deadline, useAI } = await req.json();
 
     if (!title) {
       return NextResponse.json(
@@ -45,15 +45,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // Auto-detect priority from description using AI when description is provided
-    // Priority from form is used only if description is empty
-    let finalPriority = priority;
-    if (description && description.trim().length > 0) {
-      // Always use AI when description exists, ignore manual priority selection
+    // Use AI to detect priority if useAI flag is set, otherwise use manual priority
+    let finalPriority = priority || "MEDIUM";
+    if (useAI && description && description.trim().length > 0) {
+      // Use AI to detect priority from description
       const aiPriority = await detectTaskPriority(description);
       finalPriority = aiPriority;
-    } else if (!finalPriority) {
-      finalPriority = "MEDIUM";
     }
 
     const task = await prisma.task.create({

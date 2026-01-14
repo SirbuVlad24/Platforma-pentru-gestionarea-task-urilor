@@ -170,9 +170,23 @@ export default function AdminUsersPage() {
   };
 
   const getUnassignedTasksForUser = (userId: string): Task[] => {
-    return tasks.filter(
-      (task) => !task.assignedUsers.some((assignment) => assignment.userId === userId)
-    );
+    const user = users.find(u => u.id === userId);
+    const userProjectIds = user?.projectIds || [];
+
+    return tasks.filter((task) => {
+      // Exclude tasks already assigned to this user
+      if (task.assignedUsers.some((assignment) => assignment.userId === userId)) {
+        return false;
+      }
+
+      // Include tasks without project
+      if (!task.project || !task.project.id) {
+        return true;
+      }
+
+      // Include tasks from projects where user is a member
+      return userProjectIds.includes(task.project.id);
+    });
   };
 
   if (!session || session.user.role !== "ADMIN") return null;

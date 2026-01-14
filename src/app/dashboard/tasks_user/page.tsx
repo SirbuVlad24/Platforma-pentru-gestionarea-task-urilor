@@ -5,11 +5,14 @@ import TaskCard from "@/components/TaskCard";
 import { Task } from "../../../types";
 import { useSession } from "next-auth/react";
 
+type SortOption = "deadline" | "priority" | "alphabetical" | "project";
+
 export default function UserTasksPage() {
   const { data: session } = useSession();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("deadline");
 
   useEffect(() => {
     if (!session) return;
@@ -89,29 +92,96 @@ export default function UserTasksPage() {
         </p>
       )}
 
+      {!loading && tasks.length > 0 && (
+        <div className="mb-4 flex justify-end">
+          <div className="flex items-center gap-2">
+            <label className="text-red-900 font-bold text-sm" style={{ fontFamily: "'Pirata One', cursive" }}>
+              Sort by:
+            </label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              className="px-3 py-2 bg-white border-2 border-black rounded-lg text-red-900 font-bold cursor-pointer hover:bg-red-50 transition"
+              style={{ fontFamily: "'Pirata One', cursive" }}
+            >
+              <option value="deadline">⏰ Deadline</option>
+              <option value="priority">⚓ Priority</option>
+              <option value="project">🚢 Project</option>
+              <option value="alphabetical">🔤 Alphabetical</option>
+            </select>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            id={task.id}
-            title={task.title}
-            description={task.description}
-            priority={task.priority}
-            status={task.status}
-            deadline={task.deadline}
-            onComplete={() => {
-              // Refresh tasks after completion
-              fetch("/api/tasks/my-tasks")
-                .then((res) => res.json())
-                .then((data) => {
-                  if (data.tasks) {
-                    setTasks(data.tasks);
-                  }
-                })
-                .catch(console.error);
-            }}
-          />
-        ))}
+        {(() => {
+          const sortedTasks = [...tasks].sort((a, b) => {
+            if (sortBy === "deadline") {
+              // Sort by deadline: tasks without deadline go to the end
+              if (!a.deadline && !b.deadline) return 0;
+              if (!a.deadline) return 1;
+              if (!b.deadline) return -1;
+              return new Date(a.deadline!).getTime() - new Date(b.deadline!).getTime();
+            } else if (sortBy === "priority") {
+              // Sort by priority: HIGH > MEDIUM > LOW
+              const priorityOrder = { HIGH: 3, MEDIUM: 2, LOW: 1 };
+              const priorityA = priorityOrder[(a.priority?.toUpperCase() as keyof typeof priorityOrder) || "MEDIUM"] || 2;
+              const priorityB = priorityOrder[(b.priority?.toUpperCase() as keyof typeof priorityOrder) || "MEDIUM"] || 2;
+              if (priorityA !== priorityB) {
+                return priorityB - priorityA; // Descending (HIGH first)
+              }
+              // If same priority, sort by deadline, then alphabetically
+              if (a.deadline && b.deadline) {
+                const deadlineDiff = new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+                if (deadlineDiff !== 0) return deadlineDiff;
+              }
+              return (a.title || "").localeCompare(b.title || "");
+            } else if (sortBy === "project") {
+              // Sort by project: tasks without project go to the end
+              const projectA = (a as any).project?.name || "";
+              const projectB = (b as any).project?.name || "";
+              if (!projectA && !projectB) return 0;
+              if (!projectA) return 1;
+              if (!projectB) return -1;
+              // If both have projects, sort alphabetically by project name
+              const projectCompare = projectA.localeCompare(projectB);
+              if (projectCompare !== 0) return projectCompare;
+              // If same project, sort by deadline, then alphabetically
+              if (a.deadline && b.deadline) {
+                const deadlineDiff = new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+                if (deadlineDiff !== 0) return deadlineDiff;
+              }
+              return (a.title || "").localeCompare(b.title || "");
+            } else {
+              // Sort alphabetically by title
+              return (a.title || "").localeCompare(b.title || "");
+            }
+          });
+
+          return sortedTasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              id={task.id}
+              title={task.title}
+              description={task.description}
+              priority={task.priority}
+              status={task.status}
+              deadline={task.deadline}
+              project={(task as any).project || null}
+              onComplete={() => {
+                // Refresh tasks after completion
+                fetch("/api/tasks/my-tasks")
+                  .then((res) => res.json())
+                  .then((data) => {
+                    if (data.tasks) {
+                      setTasks(data.tasks);
+                    }
+                  })
+                  .catch(console.error);
+              }}
+            />
+          ));
+        })()}
       </div>
     </div>
   );
