@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Ye must be logged in to board this ship, sailor!" }, { status: 401 });
     }
 
-    const { title, description, priority, projectId } = await req.json();
+    const { title, description, priority, projectId, deadline } = await req.json();
 
     if (!title) {
       return NextResponse.json(
@@ -50,10 +50,8 @@ export async function POST(req: Request) {
     let finalPriority = priority;
     if (description && description.trim().length > 0) {
       // Always use AI when description exists, ignore manual priority selection
-      console.log("Detecting priority from description using AI...");
       const aiPriority = await detectTaskPriority(description);
       finalPriority = aiPriority;
-      console.log(`AI detected priority: ${aiPriority} for description: "${description.substring(0, 50)}..."`);
     } else if (!finalPriority) {
       finalPriority = "MEDIUM";
     }
@@ -64,6 +62,10 @@ export async function POST(req: Request) {
         description: description || null,
         priority: finalPriority,
         projectId: projectId || null,
+        deadline: deadline ? new Date(deadline) : null,
+      },
+      include: {
+        assignedUsers: true,
       },
     });
 

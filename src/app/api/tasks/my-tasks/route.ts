@@ -20,9 +20,26 @@ export async function GET() {
         },
       },
       orderBy: { createdAt: "desc" },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        completed: true,
+        priority: true,
+        status: true,
+        createdAt: true,
+        deadline: true,
+        projectId: true,
         assignedUsers: {
-          include: { user: true }, 
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
         },
       },
     });

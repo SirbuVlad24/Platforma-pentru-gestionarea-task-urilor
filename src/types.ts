@@ -5,5 +5,6 @@ export interface Task {
     status?: "To Do" | "In Progress" | "Done";
     priority?: "Low" | "Medium" | "High";
     project?: string;
+    deadline?: string | null;
   }
   
