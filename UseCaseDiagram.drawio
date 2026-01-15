@@ -1,0 +1,312 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.1">
+  <diagram name="Pagină-1" id="hzpH3U99LdHy8PTGGc2a">
+    <mxGraphModel dx="1971" dy="811" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-1" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Captain&#39;s Log" vertex="1">
+          <mxGeometry height="4847" width="789" x="752" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-2" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Dashboard" vertex="1">
+          <mxGeometry height="812" width="265" x="775" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-3" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Proiecte (Nave)" vertex="1">
+          <mxGeometry height="1812" width="265" x="777" y="1402" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-4" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Task-uri (Misiuni)" vertex="1">
+          <mxGeometry height="1181" width="739" x="777" y="3234" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-5" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Autentificare &amp; Utilizatori" vertex="1">
+          <mxGeometry height="942" width="265" x="777" y="4470" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-9" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Înregistrare cont" vertex="1">
+          <mxGeometry height="135" width="135" x="842" y="4470" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-10" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Autentificare" vertex="1">
+          <mxGeometry height="110" width="110" x="855" y="4654" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-11" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Deconectare" vertex="1">
+          <mxGeometry height="105" width="105" x="857" y="4814" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-13" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Modificare rol utilizator" vertex="1">
+          <mxGeometry height="185" width="185" x="817" y="5157" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-14" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Creare task" vertex="1">
+          <mxGeometry height="97" width="97" x="1111" y="4205" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-15" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Vizualizare task-uri" vertex="1">
+          <mxGeometry height="153" width="153" x="833" y="3269" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-16" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Editare task" vertex="1">
+          <mxGeometry height="101" width="101" x="1080" y="3868" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-17" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Ștergere task" vertex="1">
+          <mxGeometry height="110" width="110" x="855" y="3472" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-18" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Completare task" vertex="1">
+          <mxGeometry height="133" width="133" x="843" y="3831" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-19" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Asignare task" vertex="1">
+          <mxGeometry height="110" width="110" x="855" y="4244" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-22" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Setare deadline" vertex="1">
+          <mxGeometry height="128" width="128" x="1320" y="3969" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-23" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Detectare automată prioritate" vertex="1">
+          <mxGeometry height="215" width="215" x="1277" y="4146" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-24" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Creare proiect" vertex="1">
+          <mxGeometry height="119" width="119" x="850" y="1437" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-25" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Vizualizare proiecte" vertex="1">
+          <mxGeometry height="158" width="158" x="831" y="1606" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-26" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Editare proiect" vertex="1">
+          <mxGeometry height="123" width="123" x="848" y="1814" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-27" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Ștergere proiect" vertex="1">
+          <mxGeometry height="132" width="132" x="844" y="1987" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-28" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Adăugare membru în proiect" vertex="1">
+          <mxGeometry height="215" width="215" x="802" y="2169" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-29" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Eliminare membru din proiect" vertex="1">
+          <mxGeometry height="215" width="215" x="802" y="2434" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-30" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Setare administrator proiect" vertex="1">
+          <mxGeometry height="215" width="215" x="802" y="2699" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-31" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Organizare task-uri în proiect" vertex="1">
+          <mxGeometry height="215" width="215" x="802" y="2964" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-32" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Vizualizare dashboard" vertex="1">
+          <mxGeometry height="172" width="172" x="824" y="605" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-33" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Filtrare task-uri" vertex="1">
+          <mxGeometry height="128" width="128" x="842" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-34" parent="1" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" value="Căutare task-uri" vertex="1">
+          <mxGeometry height="131" width="131" x="842" y="1038" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-36" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.28;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-9" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="4537" />
+            </Array>
+            <mxPoint x="696.1772151898736" y="4539.354430379746" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-37" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.64;exitY=0.99;entryX=0;entryY=0.22;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-10" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="4633" />
+              <mxPoint x="777" y="4633" />
+            </Array>
+            <mxPoint x="587" y="4547.5" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-38" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=0.99;entryX=0;entryY=0.76;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-10" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="4778" />
+              <mxPoint x="777" y="4778" />
+            </Array>
+            <mxPoint x="587" y="3345.5" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-39" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=0.99;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-11" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="4867" />
+            </Array>
+            <mxPoint x="587" y="3345.5" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-41" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.19;entryY=0;rounded=0;exitDx=0;exitDy=0;" target="TGxAvkL8rpFi6002R-3Z-14" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="4120" />
+              <mxPoint x="1076" y="4120" />
+            </Array>
+            <mxPoint x="205.5" y="2826" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-42" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.49;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-15" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+            <mxPoint x="657.175438596491" y="3345.1578947368416" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-43" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.332;exitY=0.943;entryX=0;entryY=0.14;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;" target="TGxAvkL8rpFi6002R-3Z-16" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="3787" />
+              <mxPoint x="920" y="3790" />
+              <mxPoint x="1076" y="3787" />
+            </Array>
+            <mxPoint x="176.7720000000004" y="2823.777" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-44" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.53;exitY=0.99;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-18" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="3898" />
+            </Array>
+            <mxPoint x="587" y="3345.5" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-47" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.188;exitY=0.974;entryX=0;entryY=0.38;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="735.51" y="3983.5" />
+              <mxPoint x="980" y="4010" />
+              <mxPoint x="1251.51" y="3983.5" />
+            </Array>
+            <mxPoint x="152.14800000000014" y="2824.9860000000003" as="sourcePoint" />
+            <mxPoint x="1329.998362037001" y="4003.7779331300735" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-48" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-25" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="1685" />
+            </Array>
+            <mxPoint x="588.5686274509803" y="3326" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-49" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-32" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="691" />
+            </Array>
+            <mxPoint x="588.5686274509803" y="3326" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-50" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-33" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="891" />
+            </Array>
+            <mxPoint x="588.5686274509803" y="3326" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-51" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-34" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="727" y="1071" />
+            </Array>
+            <mxPoint x="588.5686274509803" y="3326" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-53" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=0.99;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-13" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="5249" />
+            </Array>
+            <mxPoint x="205.5" y="2806.5000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-54" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.53;exitY=0.99;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-17" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="3527" />
+            </Array>
+            <mxPoint x="205.5" y="2806.5000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-55" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=0.99;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-19" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="4299" />
+            </Array>
+            <mxPoint x="205.5" y="2806.5000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-56" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-24" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="1496" />
+            </Array>
+            <mxPoint x="207.1764705882356" y="2787.0000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-57" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.52;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-26" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="1875" />
+            </Array>
+            <mxPoint x="208.85294117647072" y="2787.0000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-58" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.53;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-27" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="2053" />
+            </Array>
+            <mxPoint x="210.5294117647063" y="2787.0000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-59" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.54;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-28" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="2276" />
+            </Array>
+            <mxPoint x="212.205882352941" y="2787.0000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-60" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.58;exitY=-0.01;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-29" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="2541" />
+            </Array>
+            <mxPoint x="218.9117647058829" y="2787.0000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-61" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.49;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-30" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+            <mxPoint x="281.1770222743262" y="2806.154806565065" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-62" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0.58;exitY=0.99;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-31" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="3071" />
+            </Array>
+            <mxPoint x="205.5" y="2806.5000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-63" edge="1" parent="1" source="TGxAvkL8rpFi6002R-3Z-14" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-23" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-66" edge="1" parent="1" source="TGxAvkL8rpFi6002R-3Z-16" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=0.65;exitY=1;entryX=0;entryY=0.81;rounded=0;" target="TGxAvkL8rpFi6002R-3Z-22" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1243" y="4121" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-69" edge="1" parent="1" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=0.54;exitY=0.99;entryX=0;entryY=0.49;rounded=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="381" y="3345" />
+            </Array>
+            <mxPoint x="205.5" y="2806.5000000000005" as="sourcePoint" />
+            <mxPoint x="517.1745635910224" y="3345.1596009975065" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-71" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Capitan" vertex="1">
+          <mxGeometry height="130" width="100" x="120" y="2690" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-72" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Crew" vertex="1">
+          <mxGeometry height="130" width="100" x="500" y="3269" as="geometry" />
+        </mxCell>
+        <mxCell id="TGxAvkL8rpFi6002R-3Z-76" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="User neautentificat" vertex="1">
+          <mxGeometry height="110" width="100" x="600" y="4450" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
